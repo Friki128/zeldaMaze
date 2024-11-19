@@ -22,6 +22,11 @@ public class userDAOImpl implements userDAO{
     }
 
     @Override
+    public user findUser(int id) {
+        return jdbcTemplate.queryForObject("SELECT * FROM user WHERE id=?;",  new DataClassRowMapper<>(user.class), id);
+    }
+
+    @Override
     public user findUserByNameAndPassword(String name, String password) {
         return jdbcTemplate.queryForObject("SELECT * FROM user WHERE user.name=? AND password=?;",  new DataClassRowMapper<>(user.class), name, password);
     }
