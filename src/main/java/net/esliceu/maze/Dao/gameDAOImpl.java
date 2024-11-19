@@ -14,12 +14,12 @@ public class gameDAOImpl implements gameDAO{
     JdbcTemplate jdbcTemplate;
     @Override
     public void addGame(game game) {
-        jdbcTemplate.update("INSERT INTO game(user, map, current_room, coin_amount, time, current) VALUES(?, ?, ?, ?, ?, ?);", game.getUser(), game.getMap(), game.getCurrentRoom(), game.getCoinAmount(), game.getTime(), true);
+        jdbcTemplate.update("INSERT INTO game(user, map, current_room, coin_amount, time, current) VALUES(?, ?, ?, ?, ?, ?);", game.getUser(), game.getMap(), game.getCurrentRoom(), game.getCoinAmount(), game.getTime(), game.getCurrentRoom());
     }
 
     @Override
-    public void restartGame(game game) {
-        jdbcTemplate.update("UPDATE game SET coin_amount=?, current_room=?, time=? WHERE id=?;", 0, game.getCurrentRoom(), game.getTime(), game.getId());
+    public void updateGame(game game) {
+        jdbcTemplate.update("UPDATE game SET user=?, map=?, current_room=?, coin_amount=?, time=?, current=? WHERE id=?;", game.getUser(), game.getMap(), game.getCurrentRoom(), game.getCoinAmount(), game.getTime(), game.isPlaying(), game.getId());
     }
 
     @Override
@@ -30,10 +30,5 @@ public class gameDAOImpl implements gameDAO{
     @Override
     public game findCurrentGame(int userId) {
         return jdbcTemplate.queryForObject("SELECT * FROM game WHERE user=? AND current=?;", new DataClassRowMapper<>(game.class), userId, true);
-    }
-
-    @Override
-    public void updateCoinAmount(game game) {
-        jdbcTemplate.update("UPDATE game SET coin_amount=? WHERE id=?", game.getCoinAmount(), game.getId());
     }
 }

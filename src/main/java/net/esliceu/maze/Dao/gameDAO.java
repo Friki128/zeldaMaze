@@ -6,8 +6,7 @@ import java.util.List;
 
 public interface gameDAO {
     void addGame(game game);
-    void restartGame(game game);
+    void updateGame(game game);
     List<game> findFinishedGames();
     game findCurrentGame(int userId);
-    void updateCoinAmount(game game);
 }

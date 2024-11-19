@@ -7,5 +7,6 @@ import java.util.List;
 public interface keyGameDAO {
     void addKeyGame(keyGame keyGame);
     void removeKeyGame(keyGame keyGame);
+    void updateKeyGame(keyGame keyGame);
     List<keyGame> findKeyGamesByGame(int game);
 }

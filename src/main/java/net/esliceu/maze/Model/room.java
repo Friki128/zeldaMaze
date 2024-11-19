@@ -2,21 +2,21 @@ package net.esliceu.maze.Model;
 
 public class room {
     int id;
-    int key_id;
-    int coin_position;
-    String up_direction;
-    String down_direction;
-    String left_direction;
-    String right_direction;
+    int keyId;
+    int coinPosition;
+    String upDirection;
+    String downDirection;
+    String leftDirection;
+    String rightDirection;
 
-    public room(int id, int key_id, int coin_position, String up_direction, String down_direction, String left_direction, String right_direction) {
+    public room(int id, int keyId, int coinPosition, String upDirection, String downDirection, String leftDirection, String rightDirection) {
         this.id = id;
-        this.key_id = key_id;
-        this.coin_position = coin_position;
-        this.up_direction = up_direction;
-        this.down_direction = down_direction;
-        this.left_direction = left_direction;
-        this.right_direction = right_direction;
+        this.keyId = keyId;
+        this.coinPosition = coinPosition;
+        this.upDirection = upDirection;
+        this.downDirection = downDirection;
+        this.leftDirection = leftDirection;
+        this.rightDirection = rightDirection;
     }
 
     public int getId() {
@@ -27,51 +27,51 @@ public class room {
         this.id = id;
     }
 
-    public int getKey_id() {
-        return key_id;
+    public int getKeyId() {
+        return keyId;
     }
 
-    public void setKey_id(int key_id) {
-        this.key_id = key_id;
+    public void setKeyId(int keyId) {
+        this.keyId = keyId;
     }
 
-    public int getCoin_position() {
-        return coin_position;
+    public int getCoinPosition() {
+        return coinPosition;
     }
 
-    public void setCoin_position(int coin_position) {
-        this.coin_position = coin_position;
+    public void setCoinPosition(int coinPosition) {
+        this.coinPosition = coinPosition;
     }
 
-    public String getUp_direction() {
-        return up_direction;
+    public String getUpDirection() {
+        return upDirection;
     }
 
-    public void setUp_direction(String up_direction) {
-        this.up_direction = up_direction;
+    public void setUpDirection(String upDirection) {
+        this.upDirection = upDirection;
     }
 
-    public String getDown_direction() {
-        return down_direction;
+    public String getDownDirection() {
+        return downDirection;
     }
 
-    public void setDown_direction(String down_direction) {
-        this.down_direction = down_direction;
+    public void setDownDirection(String downDirection) {
+        this.downDirection = downDirection;
     }
 
-    public String getLeft_direction() {
-        return left_direction;
+    public String getLeftDirection() {
+        return leftDirection;
     }
 
-    public void setLeft_direction(String left_direction) {
-        this.left_direction = left_direction;
+    public void setLeftDirection(String leftDirection) {
+        this.leftDirection = leftDirection;
     }
 
-    public String getRight_direction() {
-        return right_direction;
+    public String getRightDirection() {
+        return rightDirection;
     }
 
-    public void setRight_direction(String right_direction) {
-        this.right_direction = right_direction;
+    public void setRightDirection(String rightDirection) {
+        this.rightDirection = rightDirection;
     }
 }

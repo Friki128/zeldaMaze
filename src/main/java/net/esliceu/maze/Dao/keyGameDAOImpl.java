@@ -24,6 +24,11 @@ public class keyGameDAOImpl implements keyGameDAO{
     }
 
     @Override
+    public void updateKeyGame(keyGame keyGame) {
+        jdbcTemplate.update("UPDATE key_game SET game=?, name=? WHERE id=?;", keyGame.getGame(), keyGame.getName(), keyGame.getId());
+    }
+
+    @Override
     public List<keyGame> findKeyGamesByGame(int game) {
         return jdbcTemplate.query("SELECT * FROM key_game WHERE game=?;", new DataClassRowMapper<>(keyGame.class), game);
     }
