@@ -4,6 +4,7 @@ import net.esliceu.maze.Dao.userDAO;
 import net.esliceu.maze.Exceptions.IncorrectLoginException;
 import net.esliceu.maze.Exceptions.UsernameInUseException;
 import net.esliceu.maze.Model.user;
+import net.esliceu.maze.Utils.hashCreator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -13,7 +14,7 @@ public class userService {
     userDAO userDAO;
     void register(String name, String password) throws UsernameInUseException {
         if(!checkUserNameAvailability(name)) throw new UsernameInUseException();
-        user user = new user(0, name, password);
+        user user = new user(0, name, hashCreator.hash(password));
         userDAO.addUser(user);
     }
     void deleteUser(int id){
@@ -25,7 +26,7 @@ public class userService {
         return user != null;
     }
     user login(String name, String password) throws IncorrectLoginException {
-        user user = userDAO.findUserByNameAndPassword(name, password);
+        user user = userDAO.findUserByNameAndPassword(name, hashCreator.hash(password));
         if(user == null) throw new IncorrectLoginException();
         return user;
     }
