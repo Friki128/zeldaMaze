@@ -14,7 +14,7 @@ public class roomDAOImpl implements roomDAO{
     JdbcTemplate jdbcTemplate;
     @Override
     public void addRoom(room room) {
-        jdbcTemplate.update("INSERT INTO room(key_id, coin_position, up_direction, down_direction, right_direction, left_direction) VALUES(?,?,?,?,?,?);", room.getKeyId(), room.getCoinPosition(), room.getUpDirection(), room.getDownDirection(), room.getRightDirection(), room.getLeftDirection());
+        jdbcTemplate.update("INSERT INTO room(key_id, key_position, coin_position, up_direction, down_direction, right_direction, left_direction) VALUES(?,?,?,?,?,?,?);", room.getKeyId(), room.getKeyPosition(), room.getCoinPosition(), room.getUpDirection(), room.getDownDirection(), room.getRightDirection(), room.getLeftDirection());
     }
 
     @Override
@@ -24,7 +24,7 @@ public class roomDAOImpl implements roomDAO{
 
     @Override
     public void updateRoom(room room) {
-        jdbcTemplate.update("UPDATE room SET key_id=?, coin_position=?, up_direction=?, down_direction=?, right_direction=?, left_direction=? WHERE id=?;", room.getKeyId(), room.getCoinPosition(), room.getUpDirection(), room.getDownDirection(), room.getRightDirection(), room.getLeftDirection(), room.getId());
+        jdbcTemplate.update("UPDATE room SET key_id=?, key_position=?, coin_position=?, up_direction=?, down_direction=?, right_direction=?, left_direction=? WHERE id=?;", room.getKeyId(), room.getKeyPosition(), room.getCoinPosition(), room.getUpDirection(), room.getDownDirection(), room.getRightDirection(), room.getLeftDirection(), room.getId());
     }
 
     @Override

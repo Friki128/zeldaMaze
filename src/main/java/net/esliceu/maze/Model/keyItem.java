@@ -4,13 +4,11 @@ public class keyItem {
     int id;
     String name;
     int cost;
-    int position;
 
-    public keyItem(int id, String name, int cost, int position) {
+    public keyItem(int id, String name, int cost) {
         this.id = id;
         this.name = name;
         this.cost = cost;
-        this.position = position;
     }
 
     public int getId() {
@@ -35,13 +33,5 @@ public class keyItem {
 
     public void setCost(int cost) {
         this.cost = cost;
-    }
-
-    public int getPosition() {
-        return position;
-    }
-
-    public void setPosition(int position) {
-        this.position = position;
     }
 }

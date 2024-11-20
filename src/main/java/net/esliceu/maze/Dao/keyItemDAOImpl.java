@@ -14,7 +14,7 @@ public class keyItemDAOImpl implements keyItemDAO{
     JdbcTemplate jdbcTemplate;
     @Override
     public void addKeyItem(keyItem keyItem) {
-        jdbcTemplate.update("INSERT INTO key_item(name, cost, position) VALUES(?, ?, ?);", keyItem.getName(), keyItem.getCost(), keyItem.getPosition());
+        jdbcTemplate.update("INSERT INTO key_item(name, cost) VALUES(?, ?);", keyItem.getName(), keyItem.getCost());
     }
 
     @Override
@@ -24,7 +24,7 @@ public class keyItemDAOImpl implements keyItemDAO{
 
     @Override
     public void updateKeyItem(keyItem keyItem) {
-        jdbcTemplate.update("UPDATE key_item SET name=?, cost=?, position=? WHERE id=?;", keyItem.getName(), keyItem.getCost(), keyItem.getPosition(), keyItem.getId());
+        jdbcTemplate.update("UPDATE key_item SET name=?, cost=? WHERE id=?;", keyItem.getName(), keyItem.getCost(), keyItem.getId());
     }
 
     @Override
