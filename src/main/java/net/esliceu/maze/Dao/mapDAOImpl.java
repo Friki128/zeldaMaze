@@ -6,6 +6,8 @@ import org.springframework.jdbc.core.DataClassRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public class mapDAOImpl implements mapDAO{
     @Autowired
@@ -27,7 +29,12 @@ public class mapDAOImpl implements mapDAO{
     }
 
     @Override
-    public map getMap(int id) {
+    public map findMap(int id) {
         return jdbcTemplate.queryForObject("SELECT * FROM map WHERE id=?;", new DataClassRowMapper<>(map.class), id);
+    }
+
+    @Override
+    public List<map> findMaps() {
+        return jdbcTemplate.query("SELECT * FROM map;", new DataClassRowMapper<>(map.class));
     }
 }
