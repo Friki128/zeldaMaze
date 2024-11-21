@@ -13,7 +13,7 @@ public class userDAOImpl implements userDAO{
     JdbcTemplate jdbcTemplate;
     @Override
     public void addUser(user user) {
-        jdbcTemplate.update("INSERT INTO user(name, password) VALUES(?, ?);", user.getName(), user.getPassword());
+        jdbcTemplate.update("INSERT INTO user(name, password, admin) VALUES(?, ?, ?);", user.getName(), user.getPassword(), user.isAdmin());
     }
 
     @Override

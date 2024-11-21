@@ -14,7 +14,7 @@ public class userService {
     userDAO userDAO;
     void register(String name, String password) throws UsernameInUseException {
         if(!checkUserNameAvailability(name)) throw new UsernameInUseException();
-        user user = new user(0, name, hashCreator.hash(password));
+        user user = new user(0, name, hashCreator.hash(password), false);
         userDAO.addUser(user);
     }
     void deleteUser(int id){

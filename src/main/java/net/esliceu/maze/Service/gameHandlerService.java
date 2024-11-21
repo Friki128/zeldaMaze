@@ -1,5 +1,6 @@
 package net.esliceu.maze.Service;
 
+import jakarta.el.LambdaExpression;
 import net.esliceu.maze.Dao.gameRoomDAO;
 import net.esliceu.maze.Dao.gameDAO;
 import net.esliceu.maze.Dao.keyGameDAO;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.concurrent.Callable;
 
 @Repository
 public class gameHandlerService {
@@ -76,6 +78,10 @@ public class gameHandlerService {
         }
         throw new KeyNotInListException();
     }
+    public void removeKeyGameByNameAndGame(int gameId, String name) throws KeyNotInListException {
+        keyGame keyGame = getKeyGameByName(gameId, name);
+        keyGameDAO.removeKeyGame(keyGame);
+    }
     public gameRoom getGameRoom(int id) throws RoomNotInMapException {
         gameRoom gameRoom = gameRoomDAO.findGameRoom(id);
         if(gameRoom == null) throw new RoomNotInMapException();
@@ -95,5 +101,84 @@ public class gameHandlerService {
         gameRoom gameRoom = getGameRoom(id);
         gameRoom.setKeyStatus(false);
         gameRoomDAO.updateGameRoom(gameRoom);
+    }
+    public void move(user user, String direction) throws GameDoesNotExistException, RoomNotInMapException, RoomConnectionDoesNotExist, RoomDoesNotExistException, InvalidDirectionException, ClosedDoorException, NoDoorException {
+        game game = getCurrentGame(user.getId());
+        gameRoom gameRoom = getGameRoom(game.getCurrentRoom());
+        roomMap roomMap = mazeComponentsService.getRoomMap(gameRoom.getRoomMap());
+        String directionStatus = "";
+        int newRoom = switch (direction) {
+            case "N" -> {
+                directionStatus = gameRoom.getUpDirection();
+                yield roomMap.getUpDirection();
+            }
+            case "S" -> {
+                directionStatus = gameRoom.getDownDirection();
+                yield roomMap.getDownDirection();
+            }
+            case "E" -> {
+                directionStatus = gameRoom.getRightDirection();
+                yield roomMap.getRightDirection();
+            }
+            case "W" -> {
+                directionStatus = gameRoom.getLeftDirection();
+                yield roomMap.getLeftDirection();
+            }
+            default -> throw new InvalidDirectionException();
+        };
+        switch (directionStatus){
+            case "Exit":
+                endGame(user);
+                break;
+            case "Open":
+                roomMap mapLoader = mazeComponentsService.getRoomMap(newRoom);
+                gameRoom newCurrent = getGameRoomByGameAndRoom(game.getId(), mapLoader.getId());
+                game.setCurrentRoom(newCurrent.getId());
+                gameDAO.updateGame(game);
+                break;
+            case "Wall":
+                throw new NoDoorException();
+            default:
+                throw new ClosedDoorException();
+        }
+    }
+    public void openDoor(user user, String direction) throws GameDoesNotExistException, RoomNotInMapException, RoomConnectionDoesNotExist, RoomDoesNotExistException, InvalidDirectionException, IncorrectKeyException {
+        game game = getCurrentGame(user.getId());
+        gameRoom gameRoom = getGameRoom(game.getCurrentRoom());
+        String directionStatus = "";
+            switch (direction) {
+                case "N":
+                    directionStatus = gameRoom.getUpDirection();
+                    break;
+                case "S":
+                    directionStatus = gameRoom.getDownDirection();
+                    break;
+                case "E":
+                    directionStatus = gameRoom.getRightDirection();
+                    break;
+                case "W":
+                    directionStatus = gameRoom.getLeftDirection();
+                    break;
+                default:
+                    throw new InvalidDirectionException();
+        };
+        try {
+            removeKeyGameByNameAndGame(game.getId(), directionStatus);
+            switch (direction){
+                case "N":
+                    gameRoom.setUpDirection("Open");
+                    break;
+                case "S":
+                    gameRoom.setDownDirection("Open");
+                    break;
+                case "E":
+                    gameRoom.setRightDirection("Open");
+                    break;
+                case "W":
+                    gameRoom.setLeftDirection("Open");
+            }
+        } catch (KeyNotInListException e) {
+            throw new IncorrectKeyException();
+        }
     }
 }

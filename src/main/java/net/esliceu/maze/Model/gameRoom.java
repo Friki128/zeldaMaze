@@ -6,13 +6,21 @@ public class gameRoom {
     int roomMap;
     boolean keyStatus;
     boolean coinStatus;
+    String upDirection;
+    String downDirection;
+    String leftDirection;
+    String rightDirection;
 
-    public gameRoom(int id, int game, int roomMap, boolean keyStatus, boolean coinStatus) {
+    public gameRoom(int id, int game, int roomMap, boolean keyStatus, boolean coinStatus, String upDirection, String downDirection, String leftDirection, String rightDirection) {
         this.id = id;
         this.game = game;
         this.roomMap = roomMap;
         this.keyStatus = keyStatus;
         this.coinStatus = coinStatus;
+        this.upDirection = upDirection;
+        this.downDirection = downDirection;
+        this.leftDirection = leftDirection;
+        this.rightDirection = rightDirection;
     }
 
     public int getId() {
@@ -53,5 +61,37 @@ public class gameRoom {
 
     public void setCoinStatus(boolean coinStatus) {
         this.coinStatus = coinStatus;
+    }
+
+    public String getUpDirection() {
+        return upDirection;
+    }
+
+    public void setUpDirection(String upDirection) {
+        this.upDirection = upDirection;
+    }
+
+    public String getDownDirection() {
+        return downDirection;
+    }
+
+    public void setDownDirection(String downDirection) {
+        this.downDirection = downDirection;
+    }
+
+    public String getLeftDirection() {
+        return leftDirection;
+    }
+
+    public void setLeftDirection(String leftDirection) {
+        this.leftDirection = leftDirection;
+    }
+
+    public String getRightDirection() {
+        return rightDirection;
+    }
+
+    public void setRightDirection(String rightDirection) {
+        this.rightDirection = rightDirection;
     }
 }

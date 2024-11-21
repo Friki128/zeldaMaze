@@ -4,11 +4,13 @@ public class user {
     int id;
     String name;
     String password;
+    boolean admin;
 
-    public user(int id, String name, String password) {
+    public user(int id, String name, String password, boolean admin) {
         this.id = id;
         this.name = name;
         this.password = password;
+        this.admin = admin;
     }
 
     public int getId() {
@@ -33,5 +35,13 @@ public class user {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public boolean isAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(boolean admin) {
+        this.admin = admin;
     }
 }
