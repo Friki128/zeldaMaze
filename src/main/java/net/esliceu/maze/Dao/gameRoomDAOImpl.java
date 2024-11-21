@@ -26,6 +26,11 @@ public class gameRoomDAOImpl implements gameRoomDAO{
     }
 
     @Override
+    public gameRoom findGameRoom(int id) {
+        return jdbcTemplate.queryForObject("SELECT * FROM game_room WHERE id=?;", new DataClassRowMapper<>(gameRoom.class), id);
+    }
+
+    @Override
     public gameRoom findGameRoomByGameAndRoom(int gameId, int roomId) {
         return jdbcTemplate.queryForObject("SELECT * FROM game_room WHERE game=? AND room_map=?;", new DataClassRowMapper<>(gameRoom.class), gameId, roomId);
     }

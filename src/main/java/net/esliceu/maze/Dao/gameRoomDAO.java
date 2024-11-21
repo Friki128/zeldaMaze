@@ -6,5 +6,6 @@ public interface gameRoomDAO {
     void addGameRoom(gameRoom gameRoom);
     void deleteGameRoom(gameRoom gameRoom);
     void updateGameRoom(gameRoom gameRoom);
+    gameRoom findGameRoom(int id);
     gameRoom findGameRoomByGameAndRoom(int gameId, int roomId);
 }
