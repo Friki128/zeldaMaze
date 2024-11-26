@@ -6,6 +6,8 @@ import org.springframework.jdbc.core.DataClassRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public class gameRoomDAOImpl implements gameRoomDAO{
     @Autowired
@@ -28,6 +30,11 @@ public class gameRoomDAOImpl implements gameRoomDAO{
     @Override
     public gameRoom findGameRoom(int id) {
         return jdbcTemplate.queryForObject("SELECT * FROM game_room WHERE id=?;", new DataClassRowMapper<>(gameRoom.class), id);
+    }
+
+    @Override
+    public List<gameRoom> findGameRoomByGame(int id) {
+        return jdbcTemplate.query("SELECT * FROM game_room WHERE game=?;", new DataClassRowMapper<>(gameRoom.class), id);
     }
 
     @Override

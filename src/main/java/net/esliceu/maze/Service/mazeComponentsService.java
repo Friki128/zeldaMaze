@@ -168,4 +168,8 @@ public class mazeComponentsService {
         if(roomMap == null) throw new RoomConnectionDoesNotExist();
         return roomMap;
     }
+
+    public List<roomMap> getRoomMapByMap(int mapId) {
+        return roomMapDAO.findRoomMapByMap(mapId);
+    }
 }

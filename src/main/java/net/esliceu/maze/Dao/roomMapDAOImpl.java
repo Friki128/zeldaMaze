@@ -7,6 +7,8 @@ import org.springframework.jdbc.core.DataClassRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public class roomMapDAOImpl implements roomMapDAO{
     @Autowired
@@ -29,5 +31,10 @@ public class roomMapDAOImpl implements roomMapDAO{
     @Override
     public roomMap findRoomMap(int id) {
         return jdbcTemplate.queryForObject("SELECT * FROM room_map WHERE id=?;", new DataClassRowMapper<>(roomMap.class), id);
+    }
+
+    @Override
+    public List<roomMap> findRoomMapByMap(int mapId) {
+        return jdbcTemplate.query("SELECT * FROM room_map WHERE map=?;", new DataClassRowMapper<>(roomMap.class), mapId);
     }
 }

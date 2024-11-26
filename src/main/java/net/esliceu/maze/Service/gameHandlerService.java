@@ -6,13 +6,12 @@ import net.esliceu.maze.Dao.gameDAO;
 import net.esliceu.maze.Dao.keyGameDAO;
 import net.esliceu.maze.Exceptions.*;
 import net.esliceu.maze.Model.*;
+import net.esliceu.maze.Utils.playerGameInfo;
 import net.esliceu.maze.Utils.timeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.concurrent.Callable;
-
 @Repository
 public class gameHandlerService {
     @Autowired
@@ -23,15 +22,40 @@ public class gameHandlerService {
     keyGameDAO keyGameDAO;
     @Autowired
     mazeComponentsService mazeComponentsService;
-    public void startGame(user user, int mapId) throws MapDoesNotExistDirection, GameAlreadyInMotionException {
+
+    public playerGameInfo getGameInfo(user user) throws GameDoesNotExistException, RoomNotInMapException, RoomConnectionDoesNotExist, RoomDoesNotExistException {
+        game game = getCurrentGame(user.getId());
+        gameRoom gameRoom = getGameRoom(game.getCurrentRoom());
+        roomMap roomMap = mazeComponentsService.getRoomMap(gameRoom.getRoomMap());
+        room room = mazeComponentsService.getRoom(roomMap.getRoom());
+        return new playerGameInfo(game.getCoinAmount(), getKeyGamesByGame(game.getId()), gameRoom.getUpDirection(), gameRoom.getDownDirection(), gameRoom.getLeftDirection(), gameRoom.getRightDirection(), room.getKeyPosition(), room.getCoinPosition(), gameRoom.isKeyStatus(), gameRoom.isCoinStatus());
+    }
+    public void startGame(user user, int mapId) throws MapDoesNotExistDirection, GameAlreadyInMotionException, RoomDoesNotExistException, RoomConnectionDoesNotExist, RoomNotInMapException {
         map map = mazeComponentsService.getMap(mapId);
         game running = gameDAO.findCurrentGame(user.getId());
         if(running != null) throw new GameAlreadyInMotionException();
-        game game = new game(0,user.getId(),mapId, map.getStartRoom(), 0, timeUtil.getTime(),true);
+        game game = new game(0,user.getId(),mapId, 1, 0, timeUtil.getTime(),true);
         gameDAO.addGame(game);
+        createGameRooms(user, mapId);
+    }
+    public void createGameRooms(user user, int mapId) throws RoomDoesNotExistException, MapDoesNotExistDirection, RoomConnectionDoesNotExist, RoomNotInMapException {
+        game game = gameDAO.findCurrentGame(user.getId());
+        map map = mazeComponentsService.getMap(mapId);
+        List<roomMap> roomMaps = mazeComponentsService.getRoomMapByMap(mapId);
+        for(roomMap roomMap : roomMaps){
+            room room = mazeComponentsService.getRoom(roomMap.getRoom());
+            gameRoom gameRoom = new gameRoom(0, game.getId(), roomMap.getId(), room.getKeyPosition() != -1, room.getCoinPosition() != -1, room.getUpDirection(), room.getDownDirection(), room.getLeftDirection(), room.getRightDirection());
+        }
+        roomMap startRoomMap = mazeComponentsService.getRoomMap(map.getStartRoom());
+        gameRoom startGameRoom = getGameRoomByGameAndRoom(game.getId(), startRoomMap.getId());
+        game.setCurrentRoom(startGameRoom.getId());
     }
     public void endGame(user user) throws GameDoesNotExistException {
         game game = getCurrentGame(user.getId());
+        List<gameRoom> gameRooms = getGameRoomsByGame(game.getId());
+        for(gameRoom gameRoom : gameRooms){
+            gameRoomDAO.deleteGameRoom(gameRoom);
+        }
         game.setPlaying(false);
         game.setTime(timeUtil.calcTimeDistance(game.getTime(), timeUtil.getTime()));
         gameDAO.updateGame(game);
@@ -86,6 +110,9 @@ public class gameHandlerService {
         gameRoom gameRoom = gameRoomDAO.findGameRoom(id);
         if(gameRoom == null) throw new RoomNotInMapException();
         return gameRoom;
+    }
+    public List<gameRoom> getGameRoomsByGame(int gameId){
+        return gameRoomDAO.findGameRoomByGame(gameId);
     }
     public gameRoom getGameRoomByGameAndRoom(int gameId, int roomId) throws RoomNotInMapException {
         gameRoom gameRoom = gameRoomDAO.findGameRoomByGameAndRoom(gameId, roomId);
