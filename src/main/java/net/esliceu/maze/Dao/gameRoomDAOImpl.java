@@ -29,7 +29,12 @@ public class gameRoomDAOImpl implements gameRoomDAO{
 
     @Override
     public gameRoom findGameRoom(int id) {
-        return jdbcTemplate.queryForObject("SELECT * FROM game_room WHERE id=?;", new DataClassRowMapper<>(gameRoom.class), id);
+        try{
+            return jdbcTemplate.queryForObject("SELECT * FROM game_room WHERE id=?;", new DataClassRowMapper<>(gameRoom.class), id);
+        }catch (Exception e){
+            return null;
+        }
+
     }
 
     @Override
@@ -39,6 +44,11 @@ public class gameRoomDAOImpl implements gameRoomDAO{
 
     @Override
     public gameRoom findGameRoomByGameAndRoom(int gameId, int roomId) {
-        return jdbcTemplate.queryForObject("SELECT * FROM game_room WHERE game=? AND room_map=?;", new DataClassRowMapper<>(gameRoom.class), gameId, roomId);
+        try {
+            return jdbcTemplate.queryForObject("SELECT * FROM game_room WHERE game=? AND room_map=?;", new DataClassRowMapper<>(gameRoom.class), gameId, roomId);
+        }catch (Exception e){
+            return null;
+        }
+
     }
 }

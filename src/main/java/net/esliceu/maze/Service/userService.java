@@ -17,7 +17,7 @@ public class userService {
     public void register(String name, String password) throws UsernameInUseException, PasswordTooShortException, EmptyNameException {
         name = name.replace(" ", "");
         if(name.isEmpty()) throw new EmptyNameException();
-        if(!checkUserNameAvailability(name)) throw new UsernameInUseException();
+        if(checkUserNameAvailability(name)) throw new UsernameInUseException();
         if(password.length() < 5) throw new PasswordTooShortException();
         user user = new user(0, name, hashCreator.hash(password), false);
         userDAO.addUser(user);

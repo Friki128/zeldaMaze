@@ -29,6 +29,10 @@ public class gameDAOImpl implements gameDAO{
 
     @Override
     public game findCurrentGame(int userId) {
-        return jdbcTemplate.queryForObject("SELECT * FROM game WHERE user=? AND current=?;", new DataClassRowMapper<>(game.class), userId, true);
+        try {
+            return jdbcTemplate.queryForObject("SELECT * FROM game WHERE user=? AND current=?;", new DataClassRowMapper<>(game.class), userId, true);
+        }catch (Exception e){
+            return null;
+        }
     }
 }

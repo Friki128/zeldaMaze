@@ -21,15 +21,17 @@ public class registerController {
     @Autowired
     userService userService;
     @GetMapping("/register")
-    public String getRegister(){
+    public String getRegister(Model model){
         if(httpSession.getAttribute("user") != null){
             return "redirect:/";
         }
-        return "loginRegisterController";
+        model.addAttribute("title", "register");
+        return "loginRegisterForm";
     }
     @PostMapping("/register")
     public String postRegister(Model model, @RequestParam String name, @RequestParam String password) throws IOException{
         try {
+            System.out.println(name);
             userService.register(name, password);
             return "redirect:/login";
         } catch (UsernameInUseException e) {
@@ -39,6 +41,7 @@ public class registerController {
         } catch (EmptyNameException e) {
             model.addAttribute("error", "Name is empty");
         }
-        return "loginRegisterController";
+        model.addAttribute("title", "register");
+        return "loginRegisterForm";
     }
 }

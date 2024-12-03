@@ -30,7 +30,11 @@ public class mapDAOImpl implements mapDAO{
 
     @Override
     public map findMap(int id) {
-        return jdbcTemplate.queryForObject("SELECT * FROM map WHERE id=?;", new DataClassRowMapper<>(map.class), id);
+        try{
+            return jdbcTemplate.queryForObject("SELECT * FROM map WHERE id=?;", new DataClassRowMapper<>(map.class), id);
+        }catch (Exception e){
+            return null;
+        }
     }
 
     @Override

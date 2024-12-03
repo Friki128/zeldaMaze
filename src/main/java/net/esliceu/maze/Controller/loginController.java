@@ -20,10 +20,11 @@ public class loginController {
     @Autowired
     userService userService;
     @GetMapping("/login")
-    public String getLogin() throws IOException{
+    public String getLogin(Model model) throws IOException{
         if(httpSession.getAttribute("user") != null){
             return "redirect:/";
         }
+        model.addAttribute("title", "login");
         return "loginRegisterForm";
     }
     @PostMapping("/login")
@@ -35,6 +36,7 @@ public class loginController {
         } catch (IncorrectLoginException e) {
             model.addAttribute("error", "Name and Password don't match");
         }
+        model.addAttribute("title", "login");
         return "loginRegisterForm";
     }
 

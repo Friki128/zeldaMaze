@@ -29,7 +29,12 @@ public class keyItemDAOImpl implements keyItemDAO{
 
     @Override
     public keyItem findKeyItem(int id) {
-        return jdbcTemplate.queryForObject("SELECT * FROM key_item WHERE id=?;", new DataClassRowMapper<>(keyItem.class), id);
+        try{
+            return jdbcTemplate.queryForObject("SELECT * FROM key_item WHERE id=?;", new DataClassRowMapper<>(keyItem.class), id);
+        }catch (Exception e){
+            return null;
+        }
+
     }
 
     @Override

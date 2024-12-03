@@ -30,7 +30,12 @@ public class roomMapDAOImpl implements roomMapDAO{
 
     @Override
     public roomMap findRoomMap(int id) {
-        return jdbcTemplate.queryForObject("SELECT * FROM room_map WHERE id=?;", new DataClassRowMapper<>(roomMap.class), id);
+        try{
+            return jdbcTemplate.queryForObject("SELECT * FROM room_map WHERE id=?;", new DataClassRowMapper<>(roomMap.class), id);
+        }catch (Exception e){
+            return null;
+        }
+
     }
 
     @Override

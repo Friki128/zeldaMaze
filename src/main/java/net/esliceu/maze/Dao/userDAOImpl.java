@@ -23,16 +23,31 @@ public class userDAOImpl implements userDAO{
 
     @Override
     public user findUser(int id) {
-        return jdbcTemplate.queryForObject("SELECT * FROM user WHERE id=?;",  new DataClassRowMapper<>(user.class), id);
+        try{
+            return jdbcTemplate.queryForObject("SELECT * FROM user WHERE id=?;",  new DataClassRowMapper<>(user.class), id);
+        }catch (Exception e){
+            return null;
+        }
+
     }
 
     @Override
     public user findUserByNameAndPassword(String name, String password) {
-        return jdbcTemplate.queryForObject("SELECT * FROM user WHERE user.name=? AND password=?;",  new DataClassRowMapper<>(user.class), name, password);
+        try{
+            return jdbcTemplate.queryForObject("SELECT * FROM user WHERE user.name=? AND password=?;",  new DataClassRowMapper<>(user.class), name, password);
+        }catch (Exception e){
+            return null;
+        }
+
     }
 
     @Override
     public user findUserByName(String name) {
-        return jdbcTemplate.queryForObject("SELECT * FROM user WHERE user.name=?;",  new DataClassRowMapper<>(user.class),name);
+        try{
+            return jdbcTemplate.queryForObject("SELECT * FROM user WHERE user.name=?;",  new DataClassRowMapper<>(user.class),name);
+        }catch (Exception e){
+            return null;
+        }
+
     }
 }
