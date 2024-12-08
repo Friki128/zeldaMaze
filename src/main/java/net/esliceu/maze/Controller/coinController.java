@@ -2,33 +2,37 @@ package net.esliceu.maze.Controller;
 
 import jakarta.servlet.http.HttpSession;
 import net.esliceu.maze.Exceptions.GameDoesNotExistException;
+import net.esliceu.maze.Exceptions.NoCoinToCollectException;
+import net.esliceu.maze.Exceptions.RoomNotInMapException;
 import net.esliceu.maze.Model.user;
 import net.esliceu.maze.Service.gameHandlerService;
-import net.esliceu.maze.Service.mazeComponentsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.io.IOException;
 
 @Controller
-public class mainPageController {
+public class coinController {
     @Autowired
     HttpSession httpSession;
     @Autowired
     gameHandlerService gameHandlerService;
-    @Autowired
-    mazeComponentsService mazeComponentsService;
-    @GetMapping("/")
-    public String mainPage(Model model) throws IOException{
+    @GetMapping("/coin")
+    public String getCoin() throws IOException {
         user user = (user) httpSession.getAttribute("user");
         try {
-            gameHandlerService.getCurrentGame(user.getId());
+            gameHandlerService.collectCoin(user);
             return "redirect:/maze";
         } catch (GameDoesNotExistException e) {
-            model.addAttribute("mazes", mazeComponentsService.getAllMaps());
-            return "mainPage";
+            errorController.setMessage("Game does not exist");
+            return "redirect:/error";
+        } catch (RoomNotInMapException e) {
+            errorController.setMessage("Room not in map");
+            return "redirect:/error";
+        } catch (NoCoinToCollectException e) {
+            errorController.setMessage("No coin to collect");
+            return "redirect:/error";
         }
     }
 }

@@ -7,6 +7,7 @@ import java.util.List;
 public class playerGameInfo {
     int coinAmount;
     List<keyGame> keyNames;
+    String roomName;
     String upDirection;
     String downDirection;
     String leftDirection;
@@ -16,9 +17,10 @@ public class playerGameInfo {
     boolean keyStatus;
     boolean coinStatus;
 
-    public playerGameInfo(int coinAmount, List<keyGame> keyNames, String upDirection, String downDirection, String leftDirection, String rightDirection, int keyPosition, int coinPosition, boolean keyStatus, boolean coinStatus) {
+    public playerGameInfo(int coinAmount, List<keyGame> keyNames, String roomName,  String upDirection, String downDirection, String leftDirection, String rightDirection, int keyPosition, int coinPosition, boolean keyStatus, boolean coinStatus) {
         this.coinAmount = coinAmount;
         this.keyNames = keyNames;
+        this.roomName = roomName;
         this.upDirection = upDirection;
         this.downDirection = downDirection;
         this.leftDirection = leftDirection;
@@ -107,5 +109,13 @@ public class playerGameInfo {
 
     public void setCoinStatus(boolean coinStatus) {
         this.coinStatus = coinStatus;
+    }
+
+    public String getRoomName() {
+        return roomName;
+    }
+
+    public void setRoomName(String roomName) {
+        this.roomName = roomName;
     }
 }

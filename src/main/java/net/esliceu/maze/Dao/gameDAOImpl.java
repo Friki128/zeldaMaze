@@ -23,6 +23,11 @@ public class gameDAOImpl implements gameDAO{
     }
 
     @Override
+    public void deleteGame(game game) {
+        jdbcTemplate.update("DELETE FROM game WHERE id=?;", game.getId());
+    }
+
+    @Override
     public List<game> findFinishedGames() {
         return jdbcTemplate.query("SELECT * FROM game WHERE current=?;", new DataClassRowMapper<>(game.class),false);
     }

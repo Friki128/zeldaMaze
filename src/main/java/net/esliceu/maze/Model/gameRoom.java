@@ -94,4 +94,5 @@ public class gameRoom {
     public void setRightDirection(String rightDirection) {
         this.rightDirection = rightDirection;
     }
+
 }

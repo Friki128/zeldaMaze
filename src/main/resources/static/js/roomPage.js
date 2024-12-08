@@ -55,3 +55,7 @@ function collided(position, mousePosition, width, height){
 function getPercentage(value){
     return (value * 100) / canvas.width;
 }
+
+document.onkeydown = function (event) {
+    console.log(event.key)
+};

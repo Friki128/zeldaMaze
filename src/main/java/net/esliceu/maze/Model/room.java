@@ -3,6 +3,7 @@ package net.esliceu.maze.Model;
 public class room {
     int id;
     int keyId;
+    String name;
     int keyPosition;
     int coinPosition;
     String upDirection;
@@ -10,7 +11,7 @@ public class room {
     String leftDirection;
     String rightDirection;
 
-    public room(int id, int keyId, int keyPosition, int coinPosition, String upDirection, String downDirection, String leftDirection, String rightDirection) {
+    public room(int id, int keyId, String name, int keyPosition, int coinPosition, String upDirection, String downDirection, String leftDirection, String rightDirection) {
         this.id = id;
         this.keyId = keyId;
         this.keyPosition = keyPosition;
@@ -19,6 +20,7 @@ public class room {
         this.downDirection = downDirection;
         this.leftDirection = leftDirection;
         this.rightDirection = rightDirection;
+        this.name = name;
     }
 
     public int getId() {
@@ -83,5 +85,13 @@ public class room {
 
     public void setRightDirection(String rightDirection) {
         this.rightDirection = rightDirection;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

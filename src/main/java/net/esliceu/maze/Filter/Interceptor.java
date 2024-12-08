@@ -2,6 +2,7 @@ package net.esliceu.maze.Filter;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import net.esliceu.maze.Model.user;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -10,8 +11,15 @@ public class Interceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest req, HttpServletResponse resp, Object handler) throws Exception {
         String uri = req.getRequestURI();
-        if((!(uri.equals("/login") || uri.equals("/register"))) && req.getSession().getAttribute("user") == null) {
+        user user = (user) req.getSession().getAttribute("user");
+        if((!(uri.equals("/login") || uri.equals("/register"))) && user != null) {
             resp.sendRedirect("/login");
+        }
+        if(uri.contains("admin")) {
+            assert user != null;
+            if (!user.isAdmin()) {
+                resp.sendRedirect("/");
+            }
         }
         return true;
     }

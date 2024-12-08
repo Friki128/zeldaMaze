@@ -31,7 +31,6 @@ public class registerController {
     @PostMapping("/register")
     public String postRegister(Model model, @RequestParam String name, @RequestParam String password) throws IOException{
         try {
-            System.out.println(name);
             userService.register(name, password);
             return "redirect:/login";
         } catch (UsernameInUseException e) {

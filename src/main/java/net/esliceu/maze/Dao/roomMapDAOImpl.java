@@ -15,7 +15,7 @@ public class roomMapDAOImpl implements roomMapDAO{
     JdbcTemplate jdbcTemplate;
     @Override
     public void addRoomMap(roomMap roomMap) {
-        jdbcTemplate.update("INSERT INTO room_map(room, map, up_direction, down_direction, right_direction, left_direction) VALUES(?,?,?,?,?,?);", roomMap.getRoom(), roomMap.getMap(), roomMap.getUpDirection(), roomMap.getDownDirection(), roomMap.getRightDirection(), roomMap.getLeftDirection());
+        jdbcTemplate.update("INSERT INTO room_map(room, map, up_direction, down_direction, right_direction, left_direction, name) VALUES(?,?,?,?,?,?,?);", roomMap.getRoom(), roomMap.getMap(), roomMap.getUpDirection(), roomMap.getDownDirection(), roomMap.getRightDirection(), roomMap.getLeftDirection(), roomMap.getName());
     }
 
     @Override
@@ -25,7 +25,7 @@ public class roomMapDAOImpl implements roomMapDAO{
 
     @Override
     public void updateRoomMap(roomMap roomMap) {
-        jdbcTemplate.update("UPDATE room_map SET room=?, map=?, up_direction=?, down_direction=?. right_direction=?, left_direction WHERE id=?;", roomMap.getRoom(), roomMap.getMap(), roomMap.getUpDirection(), roomMap.getDownDirection(), roomMap.getRightDirection(), roomMap.getLeftDirection(), roomMap.getId());
+        jdbcTemplate.update("UPDATE room_map SET room=?, map=?, up_direction=?, down_direction=?. right_direction=?, left_direction, name=? WHERE id=?;", roomMap.getRoom(), roomMap.getMap(), roomMap.getUpDirection(), roomMap.getDownDirection(), roomMap.getRightDirection(), roomMap.getLeftDirection(), roomMap.getId(), roomMap.getName());
     }
 
     @Override

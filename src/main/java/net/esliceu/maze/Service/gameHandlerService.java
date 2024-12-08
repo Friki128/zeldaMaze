@@ -1,6 +1,5 @@
 package net.esliceu.maze.Service;
 
-import jakarta.el.LambdaExpression;
 import net.esliceu.maze.Dao.gameRoomDAO;
 import net.esliceu.maze.Dao.gameDAO;
 import net.esliceu.maze.Dao.keyGameDAO;
@@ -28,10 +27,9 @@ public class gameHandlerService {
         gameRoom gameRoom = getGameRoom(game.getCurrentRoom());
         roomMap roomMap = mazeComponentsService.getRoomMap(gameRoom.getRoomMap());
         room room = mazeComponentsService.getRoom(roomMap.getRoom());
-        return new playerGameInfo(game.getCoinAmount(), getKeyGamesByGame(game.getId()), gameRoom.getUpDirection(), gameRoom.getDownDirection(), gameRoom.getLeftDirection(), gameRoom.getRightDirection(), room.getKeyPosition(), room.getCoinPosition(), gameRoom.isKeyStatus(), gameRoom.isCoinStatus());
+        return new playerGameInfo(game.getCoinAmount(), getKeyGamesByGame(game.getId()), roomMap.getName(), gameRoom.getUpDirection(), gameRoom.getDownDirection(), gameRoom.getLeftDirection(), gameRoom.getRightDirection(), room.getKeyPosition(), room.getCoinPosition(), gameRoom.isKeyStatus(), gameRoom.isCoinStatus());
     }
-    public void startGame(user user, int mapId) throws MapDoesNotExistDirection, GameAlreadyInMotionException, RoomDoesNotExistException, RoomConnectionDoesNotExist, RoomNotInMapException {
-        map map = mazeComponentsService.getMap(mapId);
+    public void startGame(user user, int mapId) throws MapDoesNotExistDirection, GameAlreadyInMotionException, RoomDoesNotExistException, RoomConnectionDoesNotExist, RoomNotInMapException, GameDoesNotExistException {
         game running = gameDAO.findCurrentGame(user.getId());
         if(running != null) throw new GameAlreadyInMotionException();
         game game = new game(0,user.getId(),mapId, 1, 0, timeUtil.getTime(),true);
@@ -45,12 +43,14 @@ public class gameHandlerService {
         for(roomMap roomMap : roomMaps){
             room room = mazeComponentsService.getRoom(roomMap.getRoom());
             gameRoom gameRoom = new gameRoom(0, game.getId(), roomMap.getId(), room.getKeyPosition() != -1, room.getCoinPosition() != -1, room.getUpDirection(), room.getDownDirection(), room.getLeftDirection(), room.getRightDirection());
+            gameRoomDAO.addGameRoom(gameRoom);
         }
         roomMap startRoomMap = mazeComponentsService.getRoomMap(map.getStartRoom());
         gameRoom startGameRoom = getGameRoomByGameAndRoom(game.getId(), startRoomMap.getId());
         game.setCurrentRoom(startGameRoom.getId());
+        gameDAO.updateGame(game);
     }
-    public void endGame(user user) throws GameDoesNotExistException {
+    public String endGame(user user) throws GameDoesNotExistException {
         game game = getCurrentGame(user.getId());
         List<gameRoom> gameRooms = getGameRoomsByGame(game.getId());
         for(gameRoom gameRoom : gameRooms){
@@ -59,6 +59,12 @@ public class gameHandlerService {
         game.setPlaying(false);
         game.setTime(timeUtil.calcTimeDistance(game.getTime(), timeUtil.getTime()));
         gameDAO.updateGame(game);
+        return game.getTime();
+    }
+    public void resetGame(user user) throws GameDoesNotExistException, MapDoesNotExistDirection, RoomDoesNotExistException, RoomConnectionDoesNotExist, RoomNotInMapException, GameAlreadyInMotionException {
+        game game = getCurrentGame(user.getId());
+        gameDAO.deleteGame(game);
+        startGame(user, game.getId());
     }
     public game getCurrentGame(int userId) throws GameDoesNotExistException {
         game game = gameDAO.findCurrentGame(userId);
@@ -75,7 +81,9 @@ public class gameHandlerService {
         room room = mazeComponentsService.getRoom(mazeComponentsService.getRoomMap(gameRoom.getRoomMap()).getId());
         keyItem keyItem = mazeComponentsService.getKeyItem(room.getKeyId());
         if(game.getCoinAmount() < keyItem.getCost()) throw new NotEnoughtFundsException();
-        removeKeyFromGameRoom(gameRoom.getId());
+        game.setCoinAmount(game.getCoinAmount() - keyItem.getCost());
+        gameDAO.updateGame(game);
+        removeKeyFromGameRoom(user);
         keyGame keyGame = new keyGame(0, game.getId(), keyItem.getName());
         keyGameDAO.addKeyGame(keyGame);
     }
@@ -88,7 +96,7 @@ public class gameHandlerService {
         game game = getCurrentGame(user.getId());
         gameRoom gameRoom = getGameRoomByGameAndRoom(game.getId(), user.getId());
         if(!gameRoom.isCoinStatus()) throw new NoCoinToCollectException();
-        removeCoinFromGameRoom(gameRoom.getId());
+        removeCoinFromGameRoom(user);
         game.setCoinAmount(game.getCoinAmount()+1);
         gameDAO.updateGame(game);
     }
@@ -101,10 +109,6 @@ public class gameHandlerService {
             if(keyGame.getName().equals(name)) return keyGame;
         }
         throw new KeyNotInListException();
-    }
-    public void removeKeyGameByNameAndGame(int gameId, String name) throws KeyNotInListException {
-        keyGame keyGame = getKeyGameByName(gameId, name);
-        keyGameDAO.removeKeyGame(keyGame);
     }
     public gameRoom getGameRoom(int id) throws RoomNotInMapException {
         gameRoom gameRoom = gameRoomDAO.findGameRoom(id);
@@ -119,21 +123,23 @@ public class gameHandlerService {
         if(gameRoom == null) throw new RoomNotInMapException();
         return gameRoom;
     }
-    public void removeCoinFromGameRoom(int id) throws RoomNotInMapException {
-        gameRoom gameRoom = getGameRoom(id);
+    public void removeCoinFromGameRoom(user user) throws RoomNotInMapException, GameDoesNotExistException {
+        game game = getCurrentGame(user.getId());
+        gameRoom gameRoom = getGameRoom(game.getCurrentRoom());
         gameRoom.setCoinStatus(false);
         gameRoomDAO.updateGameRoom(gameRoom);
     }
-    public void removeKeyFromGameRoom(int id) throws RoomNotInMapException {
-        gameRoom gameRoom = getGameRoom(id);
+    public void removeKeyFromGameRoom(user user) throws RoomNotInMapException, GameDoesNotExistException {
+        game game = getCurrentGame(user.getId());
+        gameRoom gameRoom = getGameRoom(game.getCurrentRoom());
         gameRoom.setKeyStatus(false);
         gameRoomDAO.updateGameRoom(gameRoom);
     }
-    public void move(user user, String direction) throws GameDoesNotExistException, RoomNotInMapException, RoomConnectionDoesNotExist, RoomDoesNotExistException, InvalidDirectionException, ClosedDoorException, NoDoorException {
+    public String move(user user, String direction) throws GameDoesNotExistException, RoomNotInMapException, RoomConnectionDoesNotExist, RoomDoesNotExistException, InvalidDirectionException, ClosedDoorException, NoDoorException {
         game game = getCurrentGame(user.getId());
         gameRoom gameRoom = getGameRoom(game.getCurrentRoom());
         roomMap roomMap = mazeComponentsService.getRoomMap(gameRoom.getRoomMap());
-        String directionStatus = "";
+        String directionStatus;
         int newRoom = switch (direction) {
             case "N" -> {
                 directionStatus = gameRoom.getUpDirection();
@@ -155,8 +161,7 @@ public class gameHandlerService {
         };
         switch (directionStatus){
             case "Exit":
-                endGame(user);
-                break;
+                return endGame(user);
             case "Open":
                 roomMap mapLoader = mazeComponentsService.getRoomMap(newRoom);
                 gameRoom newCurrent = getGameRoomByGameAndRoom(game.getId(), mapLoader.getId());
@@ -168,29 +173,20 @@ public class gameHandlerService {
             default:
                 throw new ClosedDoorException();
         }
+        return "";
     }
     public void openDoor(user user, String direction) throws GameDoesNotExistException, RoomNotInMapException, RoomConnectionDoesNotExist, RoomDoesNotExistException, InvalidDirectionException, IncorrectKeyException {
         game game = getCurrentGame(user.getId());
         gameRoom gameRoom = getGameRoom(game.getCurrentRoom());
-        String directionStatus = "";
-            switch (direction) {
-                case "N":
-                    directionStatus = gameRoom.getUpDirection();
-                    break;
-                case "S":
-                    directionStatus = gameRoom.getDownDirection();
-                    break;
-                case "E":
-                    directionStatus = gameRoom.getRightDirection();
-                    break;
-                case "W":
-                    directionStatus = gameRoom.getLeftDirection();
-                    break;
-                default:
-                    throw new InvalidDirectionException();
+        String directionStatus = switch (direction) {
+            case "N" -> gameRoom.getUpDirection();
+            case "S" -> gameRoom.getDownDirection();
+            case "E" -> gameRoom.getRightDirection();
+            case "W" -> gameRoom.getLeftDirection();
+            default -> throw new InvalidDirectionException();
         };
         try {
-            removeKeyGameByNameAndGame(game.getId(), directionStatus);
+            useKey(user, directionStatus);
             switch (direction){
                 case "N":
                     gameRoom.setUpDirection("Open");
@@ -203,7 +199,9 @@ public class gameHandlerService {
                     break;
                 case "W":
                     gameRoom.setLeftDirection("Open");
+                    break;
             }
+            gameRoomDAO.updateGameRoom(gameRoom);
         } catch (KeyNotInListException e) {
             throw new IncorrectKeyException();
         }

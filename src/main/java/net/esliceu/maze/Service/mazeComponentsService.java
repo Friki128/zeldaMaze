@@ -50,8 +50,8 @@ public class mazeComponentsService {
     public List<keyItem> getAllKeyItems(){
         return keyItemDAO.findKeyItems();
     }
-    public void createRoom(int keyId, int keyPosition, int coinPosition, String upDirection, String downDirection, String rightDirection, String leftDirection){
-        room room = new room(0, keyId, keyPosition, coinPosition,upDirection, downDirection, leftDirection, rightDirection);
+    public void createRoom(int keyId, String name, int keyPosition, int coinPosition, String upDirection, String downDirection, String rightDirection, String leftDirection){
+        room room = new room(0, keyId, name, keyPosition, coinPosition,upDirection, downDirection, leftDirection, rightDirection);
         roomDAO.addRoom(room);
     }
     public void deleteRoom(int id) throws RoomDoesNotExistException {
@@ -135,8 +135,8 @@ public class mazeComponentsService {
     public List<map> getAllMaps(){
         return mapDAO.findMaps();
     }
-    public void addRoomToMap(int room, int map, int upDirection, int downDirection, int leftDirection, int rightDirection){
-        roomMap roomMap = new roomMap(0, room, map, upDirection, downDirection, leftDirection, rightDirection);
+    public void addRoomToMap(int room, int map, int upDirection, int downDirection, int leftDirection, int rightDirection, String name){
+        roomMap roomMap = new roomMap(0, room, map, upDirection, downDirection, leftDirection, rightDirection, name);
         roomMapDAO.addRoomMap(roomMap);
     }
     public void removeRoomToMap(int id) throws RoomConnectionDoesNotExist {

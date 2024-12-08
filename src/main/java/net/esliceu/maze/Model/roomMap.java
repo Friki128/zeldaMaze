@@ -8,8 +8,9 @@ public class roomMap {
     int downDirection;
     int leftDirection;
     int rightDirection;
+    String name;
 
-    public roomMap(int id, int room, int map, int upDirection, int downDirection, int leftDirection, int rightDirection) {
+    public roomMap(int id, int room, int map, int upDirection, int downDirection, int leftDirection, int rightDirection, String name) {
         this.id = id;
         this.room = room;
         this.map = map;
@@ -17,6 +18,7 @@ public class roomMap {
         this.downDirection = downDirection;
         this.leftDirection = leftDirection;
         this.rightDirection = rightDirection;
+        this.name = name;
     }
 
     public int getId() {
@@ -73,5 +75,13 @@ public class roomMap {
 
     public void setRightDirection(int rightDirection) {
         this.rightDirection = rightDirection;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
