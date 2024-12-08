@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 
@@ -19,29 +20,24 @@ public class startController {
     @Autowired
     gameHandlerService gameHandlerService;
     @PostMapping("/start")
-    public String postStart(Model model, @RequestParam int mapId) throws IOException{
+    public String postStart(Model model, RedirectAttributes redirectAttributes, @RequestParam int mapId) throws IOException{
         user user = (user) httpSession.getAttribute("user");
         try {
             gameHandlerService.startGame(user, mapId);
+            return "redirect:/maze";
         } catch (MapDoesNotExistDirection e) {
-            errorController.setMessage("Map does not exist");
-            return "redirect:/error";
+            redirectAttributes.addAttribute("error", "Map does not exist.");
         } catch (GameAlreadyInMotionException e) {
-            errorController.setMessage("Game already in motion");
-            return "redirect:/error";
+            redirectAttributes.addAttribute("error", "Game already in motion.");
         } catch (RoomDoesNotExistException e) {
-            errorController.setMessage("Room does not exist");
-            return "redirect:/error";
+            redirectAttributes.addAttribute("error", "Room does not exist.");
         } catch (RoomConnectionDoesNotExist e) {
-            errorController.setMessage("Room connection does not exist");
-            return "redirect:/error";
+            redirectAttributes.addAttribute("error", "Room connection does not exist.");
         } catch (RoomNotInMapException e) {
-            errorController.setMessage("Room not in map");
-            return "redirect:/error";
+            redirectAttributes.addAttribute("error", "Room not in maze.");
         } catch (GameDoesNotExistException e) {
-            errorController.setMessage("Game does not exist");
-            return "redirect:/error";
+            redirectAttributes.addAttribute("error", "Game does not exist.");
         }
-        return "redirect:/maze";
+        return "redirect:/error";
     }
 }

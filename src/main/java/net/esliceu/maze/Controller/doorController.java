@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import net.esliceu.maze.Service.gameHandlerService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class doorController {
@@ -16,30 +17,26 @@ public class doorController {
     @Autowired
     gameHandlerService gameHandlerService;
     @GetMapping("/open")
-    public String getOpen(@RequestParam String dir){
+    public String getOpen(RedirectAttributes redirectAttributes, @RequestParam String dir){
         user user = (user) httpSession.getAttribute("user");
         try {
             gameHandlerService.openDoor(user, dir);
+            return "redirect:/maze";
         } catch (GameDoesNotExistException e) {
-            errorController.setMessage("Game does not exist");
-            return "redirect:/error";
+            redirectAttributes.addAttribute("error", "Game does not exist.");
         } catch (RoomNotInMapException e) {
-            errorController.setMessage("Room not in map");
-            return "redirect:/error";
+            redirectAttributes.addAttribute("error", "Room not in map.");
         } catch (RoomConnectionDoesNotExist e) {
-            errorController.setMessage("Room Connection does not exist");
-            return "redirect:/error";
+            redirectAttributes.addAttribute("error", "Room connection does not exist.");
         } catch (RoomDoesNotExistException e) {
-            errorController.setMessage("Room does not exist");
-            return "redirect:/error";
+            redirectAttributes.addAttribute("error", "Room does not exist.");
         } catch (InvalidDirectionException e) {
-            errorController.setMessage("Invalid Direction");
-            return "redirect:/error";
+            redirectAttributes.addAttribute("error", "The direction is invalid.");
         } catch (IncorrectKeyException e) {
-            errorController.setMessage("Incorrect Key");
-            return "redirect:/error";
+            redirectAttributes.addAttribute("error", "The key does not match the keyhole.");
+            return "redirect:/maze";
         }
-        return "redirect:/maze";
+        return "redirect:/error";
     }
 
 }

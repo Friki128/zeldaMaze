@@ -29,7 +29,7 @@ public class gameDAOImpl implements gameDAO{
 
     @Override
     public List<game> findFinishedGames() {
-        return jdbcTemplate.query("SELECT * FROM game WHERE current=?;", new DataClassRowMapper<>(game.class),false);
+        return jdbcTemplate.query("SELECT * FROM game WHERE current=? ORDERED BY time DESC;", new DataClassRowMapper<>(game.class),false);
     }
 
     @Override

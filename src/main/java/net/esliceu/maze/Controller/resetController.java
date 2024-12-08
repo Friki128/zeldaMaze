@@ -7,6 +7,7 @@ import net.esliceu.maze.Service.gameHandlerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class resetController {
@@ -15,29 +16,24 @@ public class resetController {
     @Autowired
     gameHandlerService gameHandlerService;
     @GetMapping("/reset")
-    public String getReset(){
+    public String getReset(RedirectAttributes redirectAttributes){
         user user = (user) httpSession.getAttribute("user");
         try {
             gameHandlerService.resetGame(user);
+            return "redirect:/maze";
         } catch (GameDoesNotExistException e) {
-            errorController.setMessage("Game does not exist");
-            return "redirect:/error";
+            redirectAttributes.addAttribute("error", "Game does not exist.");
         } catch (MapDoesNotExistDirection e) {
-            errorController.setMessage("Map does not exist");
-            return "redirect:/error";
+            redirectAttributes.addAttribute("error", "Map does not exist.");
         } catch (RoomDoesNotExistException e) {
-            errorController.setMessage("Room does not exist");
-            return "redirect:/error";
+            redirectAttributes.addAttribute("error", "Room does not exist.");
         } catch (RoomConnectionDoesNotExist e) {
-            errorController.setMessage("Room connection does not exist");
-            return "redirect:/error";
+            redirectAttributes.addAttribute("error", "Room connection does not exist.");
         } catch (RoomNotInMapException e) {
-            errorController.setMessage("Room not in map");
-            return "redirect:/error";
+            redirectAttributes.addAttribute("error", "Room not in maze.");
         } catch (GameAlreadyInMotionException e) {
-            errorController.setMessage("Game already in motion");
-            return "redirect:/error";
+            redirectAttributes.addAttribute("error", "Game already in motion.");
         }
-        return "redirect:/maze";
+        return "redirect:/error";
     }
 }

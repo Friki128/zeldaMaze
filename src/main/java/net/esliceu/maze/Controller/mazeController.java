@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 
@@ -21,24 +23,21 @@ public class mazeController {
     @Autowired
     gameHandlerService gameHandlerService;
     @GetMapping("/maze")
-    public String getMaze(Model model) throws IOException {
+    public String getMaze(Model model, RedirectAttributes redirectAttributes, @RequestParam String error) throws IOException {
         user user = (user) httpSession.getAttribute("user");
         try {
             model.addAttribute("status", gameHandlerService.getGameInfo(user));
+            model.addAttribute("error", error);
             return "maze";
         } catch (GameDoesNotExistException e) {
-            errorController.setMessage("Game does not exist");
-            return "redirect:/error";
+            redirectAttributes.addAttribute("error", "Game does not exist.");
         } catch (RoomNotInMapException e) {
-            errorController.setMessage("Room in map does not exist");
-            return "redirect:/error";
+            redirectAttributes.addAttribute("error", "Room not in maze.");
         } catch (RoomConnectionDoesNotExist e) {
-            errorController.setMessage("Room connection does not exist");
-            return "redirect:/error";
+            redirectAttributes.addAttribute("error", "Room connection does not exist.");
         } catch (RoomDoesNotExistException e) {
-            errorController.setMessage("Room does not exist");
-            return "redirect:/error";
+            redirectAttributes.addAttribute("error", "Room does not exist.");
         }
-
+        return "redirect:/error";
     }
 }

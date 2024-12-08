@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import net.esliceu.maze.Service.gameHandlerService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 
@@ -18,36 +19,32 @@ public class moveController {
     @Autowired
     gameHandlerService gameHandlerService;
     @GetMapping("/move")
-    public String getMove(@RequestParam String dir) throws IOException{
+    public String getMove(RedirectAttributes redirectAttributes, @RequestParam String dir) throws IOException{
         user user = (user) httpSession.getAttribute("user");
         try {
             String time = gameHandlerService.move(user, dir);
             if(!time.isEmpty()){
-                httpSession.setAttribute("time", time);
+                redirectAttributes.addAttribute("time", time);
                 return "redirect:/end";
             }
             return "redirect:/maze";
         } catch (GameDoesNotExistException e) {
-            errorController.setMessage("Game does not exist");
-            return "redirect:/error";
+            redirectAttributes.addAttribute("error", "Game does not exist.");
         } catch (RoomNotInMapException e) {
-            errorController.setMessage("Room in map does not exist");
-            return "redirect:/error";
+            redirectAttributes.addAttribute("error", "Room not in maze.");
         } catch (RoomConnectionDoesNotExist e) {
-            errorController.setMessage("Room connection does not exist");
-            return "redirect:/error";
+            redirectAttributes.addAttribute("error", "Room connection does not exist.");
         } catch (RoomDoesNotExistException e) {
-            errorController.setMessage("Room does not exist");
-            return "redirect:/error";
+            redirectAttributes.addAttribute("error", "Room does not exist.");
         } catch (InvalidDirectionException e) {
-            errorController.setMessage("Invalid direction");
-            return "redirect:/error";
+            redirectAttributes.addAttribute("error", "Invalid direction.");
         } catch (ClosedDoorException e) {
-            errorController.setMessage("The door is closed");
-            return "redirect:/error";
+            redirectAttributes.addAttribute("error", "The door is closed.");
+            return "redirect:/maze";
         } catch (NoDoorException e) {
-            errorController.setMessage("There isn't a path in that direction");
-            return "redirect:/error";
+            redirectAttributes.addAttribute("error", "There is no path there.");
+            return "redirect:/maze";
         }
+        return "redirect:/error";
     }
 }

@@ -28,7 +28,11 @@ public class mainPageController {
             return "redirect:/maze";
         } catch (GameDoesNotExistException e) {
             model.addAttribute("mazes", mazeComponentsService.getAllMaps());
-            return "mainPage";
+            return "mazes";
         }
+    }
+    @GetMapping("/admin")
+    public String adminPage(){
+        return "adminPage";
     }
 }

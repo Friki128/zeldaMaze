@@ -36,4 +36,7 @@ public class userService {
         if(user == null) throw new IncorrectLoginException();
         return user;
     }
+    public user getUser(int id){
+        return userDAO.findUser(id);
+    }
 }

@@ -42,6 +42,27 @@ public class mazeComponentsService {
         keyItem.setCost(cost);
         keyItemDAO.updateKeyItem(keyItem);
     }
+
+    public void updateRoom(int id, String name, String up, String right, String down, String left, int coin, int key, int keyId) throws RoomDoesNotExistException {
+        room room = getRoom(id);
+        room.setUpDirection(up);
+        room.setKeyPosition(key);
+        room.setLeftDirection(left);
+        room.setDownDirection(down);
+        room.setRightDirection(right);
+        room.setName(name);
+        room.setCoinPosition(coin);
+        room.setKeyId(keyId);
+        roomDAO.updateRoom(room);
+    }
+
+    public void updateKey(int id, String name, int cost) throws KeyDoesNotExistException {
+        keyItem item = getKeyItem(id);
+        item.setCost(cost);
+        item.setName(name);
+        keyItemDAO.updateKeyItem(item);
+    }
+
     public keyItem getKeyItem(int id) throws KeyDoesNotExistException {
         keyItem keyItem = keyItemDAO.findKeyItem(id);
         if(keyItem == null) throw new KeyDoesNotExistException();
@@ -109,23 +130,32 @@ public class mazeComponentsService {
         }
         roomDAO.updateRoom(room);
     }
-    public void createMap(String name, int startRoomId){
-        map map = new map(0, name, startRoomId);
+    public void createMap(String name){
+        map map = new map(0, name);
         mapDAO.addMap(map);
     }
     public void deleteMap(int id) throws MapDoesNotExistDirection {
         map map = getMap(id);
         mapDAO.deleteMap(map);
     }
-    public void changeMapName(int id, String name) throws MapDoesNotExistDirection {
+    public void updateMapName(int id, String name) throws MapDoesNotExistDirection {
         map map = getMap(id);
         map.setName(name);
         mapDAO.updateMap(map);
     }
-    public void changeStartRoom(int id, int startRoomId) throws MapDoesNotExistDirection {
+    public void updateStartRoom(int id, int startRoomId) throws MapDoesNotExistDirection {
         map map = getMap(id);
         map.setStartRoom(startRoomId);
         mapDAO.updateMap(map);
+    }
+    public void updateRoomMap(int id, int up, int down, int left, int right, String name) throws RoomConnectionDoesNotExist {
+        roomMap roomMap = getRoomMap(id);
+        roomMap.setUpDirection(up != -1 ?up :id);
+        roomMap.setDownDirection(down != -1 ?up :id);
+        roomMap.setLeftDirection(left != -1 ?up :id);
+        roomMap.setRightDirection(right != -1 ?up :id);
+        roomMap.setName(name);
+        roomMapDAO.updateRoomMap(roomMap);
     }
     public map getMap(int id) throws MapDoesNotExistDirection {
         map map = mapDAO.findMap(id);
@@ -135,8 +165,8 @@ public class mazeComponentsService {
     public List<map> getAllMaps(){
         return mapDAO.findMaps();
     }
-    public void addRoomToMap(int room, int map, int upDirection, int downDirection, int leftDirection, int rightDirection, String name){
-        roomMap roomMap = new roomMap(0, room, map, upDirection, downDirection, leftDirection, rightDirection, name);
+    public void addRoomToMap(int room, int map, String name){
+        roomMap roomMap = new roomMap(0, room, map, name);
         roomMapDAO.addRoomMap(roomMap);
     }
     public void removeRoomToMap(int id) throws RoomConnectionDoesNotExist {

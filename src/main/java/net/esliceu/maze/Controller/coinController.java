@@ -9,6 +9,7 @@ import net.esliceu.maze.Service.gameHandlerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 
@@ -19,20 +20,18 @@ public class coinController {
     @Autowired
     gameHandlerService gameHandlerService;
     @GetMapping("/coin")
-    public String getCoin() throws IOException {
+    public String getCoin(RedirectAttributes redirectAttributes) throws IOException {
         user user = (user) httpSession.getAttribute("user");
         try {
             gameHandlerService.collectCoin(user);
             return "redirect:/maze";
         } catch (GameDoesNotExistException e) {
-            errorController.setMessage("Game does not exist");
-            return "redirect:/error";
+            redirectAttributes.addAttribute("error", "Game does not exist.");
         } catch (RoomNotInMapException e) {
-            errorController.setMessage("Room not in map");
-            return "redirect:/error";
+            redirectAttributes.addAttribute("error", "Room doesn't exist in maze.");
         } catch (NoCoinToCollectException e) {
-            errorController.setMessage("No coin to collect");
-            return "redirect:/error";
+            redirectAttributes.addAttribute("error", "No coin to collect.");
         }
+        return "redirect:/error";
     }
 }

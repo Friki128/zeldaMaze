@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import net.esliceu.maze.Service.gameHandlerService;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 
@@ -17,32 +18,27 @@ public class keyController {
     @Autowired
     gameHandlerService gameHandlerService;
     @GetMapping("/key")
-    public String getKey() throws IOException{
+    public String getKey(RedirectAttributes redirectAttributes) throws IOException{
         user user = (user) httpSession.getAttribute("user");
         try {
             gameHandlerService.collectKey(user);
             return "redirect:/maze";
         } catch (KeyDoesNotExistException e) {
-            errorController.setMessage("Key does not exist");
-            return "redirect:/error";
+            redirectAttributes.addAttribute("error", "Key does not exist.");
         } catch (GameDoesNotExistException e) {
-            errorController.setMessage("Game does not exist");
-            return "redirect:/error";
+            redirectAttributes.addAttribute("error", "Game does not exist.");
         } catch (RoomNotInMapException e) {
-            errorController.setMessage("Room not in map");
-            return "redirect:/error";
+            redirectAttributes.addAttribute("error", "Room not in maze.");
         } catch (NoKeyToCollectException e) {
-            errorController.setMessage("No key to collect");
-            return "redirect:/error";
+            redirectAttributes.addAttribute("error", "No key to collect.");
         } catch (NotEnoughtFundsException e) {
-            errorController.setMessage("Not enough funds");
-            return "redirect:/error";
+            redirectAttributes.addAttribute("error", "Not enough funds to get the key.");
+            return "redirect:/maze";
         } catch (RoomDoesNotExistException e) {
-            errorController.setMessage("Room does not exist");
-            return "redirect:/error";
+            redirectAttributes.addAttribute("error", "Room does not exist.");
         } catch (RoomConnectionDoesNotExist e) {
-            errorController.setMessage("Room connection does not exist");
-            return "redirect:/error";
+            redirectAttributes.addAttribute("error", "Room connection does not exist.");
         }
+        return "redirect:/error";
     }
 }

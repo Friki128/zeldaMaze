@@ -7,9 +7,11 @@ import net.esliceu.maze.Exceptions.*;
 import net.esliceu.maze.Model.*;
 import net.esliceu.maze.Utils.playerGameInfo;
 import net.esliceu.maze.Utils.timeUtil;
+import net.esliceu.maze.Utils.score;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 @Service
 public class gameHandlerService {
@@ -21,6 +23,8 @@ public class gameHandlerService {
     keyGameDAO keyGameDAO;
     @Autowired
     mazeComponentsService mazeComponentsService;
+    @Autowired
+    userService userService;
 
     public playerGameInfo getGameInfo(user user) throws GameDoesNotExistException, RoomNotInMapException, RoomConnectionDoesNotExist, RoomDoesNotExistException {
         game game = getCurrentGame(user.getId());
@@ -71,8 +75,14 @@ public class gameHandlerService {
         if(game == null) throw new GameDoesNotExistException();
         return game;
     }
-    public List<game> getFinishedGames(){
-        return gameDAO.findFinishedGames();
+    public List<score> getFinishedGames(){
+        List<game> games = gameDAO.findFinishedGames();
+        List<score> scores = new ArrayList<>();
+        for(game game : games){
+            user user = userService.getUser(game.getUser());
+            scores.add(new score(user.getName(), game.getTime()));
+        }
+        return scores;
     }
     public void collectKey(user user) throws KeyDoesNotExistException, GameDoesNotExistException, RoomNotInMapException, NoKeyToCollectException, NotEnoughtFundsException, RoomDoesNotExistException, RoomConnectionDoesNotExist {
         game game = getCurrentGame(user.getId());

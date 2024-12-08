@@ -21,6 +21,13 @@ public class roomMap {
         this.name = name;
     }
 
+    public roomMap(int id, int room, int map, String name){
+        this.id = id;
+        this.name = name;
+        this.room = room;
+        this.map = map;
+    }
+
     public int getId() {
         return id;
     }
