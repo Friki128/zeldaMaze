@@ -39,6 +39,6 @@ public class keyController {
         } catch (RoomConnectionDoesNotExist e) {
             redirectAttributes.addAttribute("error", "Room connection does not exist.");
         }
-        return "redirect:/error";
+        return "redirect:/errorDisplay";
     }
 }

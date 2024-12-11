@@ -1,16 +1,18 @@
 package net.esliceu.maze.Model;
 
+import org.springframework.data.relational.core.sql.In;
+
 public class roomMap {
     int id;
     int room;
     int map;
-    int upDirection;
-    int downDirection;
-    int leftDirection;
-    int rightDirection;
+    Integer upDirection;
+    Integer downDirection;
+    Integer leftDirection;
+    Integer rightDirection;
     String name;
 
-    public roomMap(int id, int room, int map, int upDirection, int downDirection, int leftDirection, int rightDirection, String name) {
+    public roomMap(int id, int room, int map, Integer upDirection, Integer downDirection, Integer leftDirection, Integer rightDirection, String name) {
         this.id = id;
         this.room = room;
         this.map = map;
@@ -19,13 +21,6 @@ public class roomMap {
         this.leftDirection = leftDirection;
         this.rightDirection = rightDirection;
         this.name = name;
-    }
-
-    public roomMap(int id, int room, int map, String name){
-        this.id = id;
-        this.name = name;
-        this.room = room;
-        this.map = map;
     }
 
     public int getId() {
@@ -52,35 +47,35 @@ public class roomMap {
         this.map = map;
     }
 
-    public int getUpDirection() {
+    public Integer getUpDirection() {
         return upDirection;
     }
 
-    public void setUpDirection(int upDirection) {
+    public void setUpDirection(Integer upDirection) {
         this.upDirection = upDirection;
     }
 
-    public int getDownDirection() {
+    public Integer getDownDirection() {
         return downDirection;
     }
 
-    public void setDownDirection(int downDirection) {
+    public void setDownDirection(Integer downDirection) {
         this.downDirection = downDirection;
     }
 
-    public int getLeftDirection() {
+    public Integer getLeftDirection() {
         return leftDirection;
     }
 
-    public void setLeftDirection(int leftDirection) {
+    public void setLeftDirection(Integer leftDirection) {
         this.leftDirection = leftDirection;
     }
 
-    public int getRightDirection() {
+    public Integer getRightDirection() {
         return rightDirection;
     }
 
-    public void setRightDirection(int rightDirection) {
+    public void setRightDirection(Integer rightDirection) {
         this.rightDirection = rightDirection;
     }
 

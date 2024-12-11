@@ -38,6 +38,6 @@ public class startController {
         } catch (GameDoesNotExistException e) {
             redirectAttributes.addAttribute("error", "Game does not exist.");
         }
-        return "redirect:/error";
+        return "redirect:/errorDisplay";
     }
 }

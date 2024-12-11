@@ -38,6 +38,6 @@ public class mazeController {
         } catch (RoomDoesNotExistException e) {
             redirectAttributes.addAttribute("error", "Room does not exist.");
         }
-        return "redirect:/error";
+        return "redirect:/errorDisplay";
     }
 }

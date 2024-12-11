@@ -25,7 +25,7 @@ public class roomMapDAOImpl implements roomMapDAO{
 
     @Override
     public void updateRoomMap(roomMap roomMap) {
-        jdbcTemplate.update("UPDATE room_map SET room=?, map=?, up_direction=?, down_direction=?. right_direction=?, left_direction, name=? WHERE id=?;", roomMap.getRoom(), roomMap.getMap(), roomMap.getUpDirection(), roomMap.getDownDirection(), roomMap.getRightDirection(), roomMap.getLeftDirection(), roomMap.getId(), roomMap.getName());
+        jdbcTemplate.update("UPDATE room_map SET up_direction=?, down_direction=?, right_direction=?, left_direction=?, name=? WHERE id=?;", roomMap.getUpDirection(), roomMap.getDownDirection(), roomMap.getRightDirection(), roomMap.getLeftDirection(), roomMap.getName(), roomMap.getId());
     }
 
     @Override

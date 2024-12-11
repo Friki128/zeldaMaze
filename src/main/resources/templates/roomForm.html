@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Room</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="inline">
+        <canvas width="800" height="800" id="canvas"></canvas>
+        <div class="content">
+            <h1>Room</h1>
+            <form th:action="'/admin' + ${type} + 'Room'" th:switch="${type}" method="post">
+                <input type="number" name="id" id="id" th:value="${id}" class="hidden" th:case="Update">
+                <label for="name">Name</label>
+                <input type="text" name="name" id="name" th:value="${name}">
+                <label for="coin">Coin position</label>
+                <select name="coin" id="coin">
+                    <option value="-1" th:selected="${coinPosition == -1}" >None</option>
+                    <option value="0" th:selected="${coinPosition == 0}" >Top Left</option>
+                    <option value="1" th:selected="${coinPosition == 1}">Top Right</option>
+                    <option value="2" th:selected="${coinPosition == 2}">Bottom Left</option>
+                    <option value="3" th:selected="${coinPosition == 3}">Bottom Right</option>
+                </select>
+                <label for="key">Key position</label>
+                <select name="key" id="key">
+                    <option value="-1" th:selected="${keyPosition == -1}">None</option>
+                    <option value="0" th:selected="${keyPosition == 0}">Top Left</option>
+                    <option value="1" th:selected="${keyPosition == 1}">Top Right</option>
+                    <option value="2" th:selected="${keyPosition == 2}">Bottom Left</option>
+                    <option value="3" th:selected="${keyPosition == 3}">Bottom Right</option>
+                </select>
+                <label for="keyId">Key</label>
+                <select name="keyId" id="keyId" th:value="${keyId}">
+                    <option th:each="item : ${keys}" th:value="${item.id}" th:text="${item.name}" th:selected="${keyId == item.id}"></option>
+                </select>
+                <label for="up">Up</label>
+                <input type="text" name="up" id="up" th:value="${up}">
+                <label for="left">Left</label>
+                <input type="text" name="left" id="left" th:value="${left}">
+                <label for="down">Down</label>
+                <input type="text" name="down" id="down" th:value="${down}">
+                <label for="right">Right</label>
+                <input type="text" name="right" id="right" th:value="${right}">
+                <input class="button" type="submit" value="Submit">
+            </form>
+        </div>
+    </div>
+    <script type="module" src="/js/roomForm.js"></script>
+</body>
+</html>

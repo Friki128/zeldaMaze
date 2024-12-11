@@ -45,6 +45,6 @@ public class moveController {
             redirectAttributes.addAttribute("error", "There is no path there.");
             return "redirect:/maze";
         }
-        return "redirect:/error";
+        return "redirect:/errorDisplay";
     }
 }

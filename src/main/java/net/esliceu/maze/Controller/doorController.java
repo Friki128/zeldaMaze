@@ -36,7 +36,7 @@ public class doorController {
             redirectAttributes.addAttribute("error", "The key does not match the keyhole.");
             return "redirect:/maze";
         }
-        return "redirect:/error";
+        return "redirect:/errorDisplay";
     }
 
 }

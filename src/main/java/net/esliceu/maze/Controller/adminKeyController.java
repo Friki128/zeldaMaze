@@ -20,13 +20,14 @@ public class adminKeyController {
     mazeComponentsService mazeComponentsService;
     @GetMapping("/adminKey")
     public String getAdminKey(Model model){
-        model.addAttribute("keys", mazeComponentsService.getAllKeyItems());
-        return "keys";
+        model.addAttribute("type", "Key");
+        model.addAttribute("values", mazeComponentsService.getAllKeyItems());
+        return "adminList";
     }
-    @PostMapping("/adminDelKey")
-    public String postAdminDelKey(RedirectAttributes redirectAttributes, @RequestParam int keyId){
+    @GetMapping("/adminDelKey")
+    public String getAdminDelKey(RedirectAttributes redirectAttributes, @RequestParam int id){
         try {
-            mazeComponentsService.deleteKey(keyId);
+            mazeComponentsService.deleteKey(id);
             return "redirect:/adminKey";
         } catch (KeyDoesNotExistException e) {
             redirectAttributes.addAttribute("error", "Key does not exist.");
@@ -38,6 +39,7 @@ public class adminKeyController {
     public String getAdminUpdateKey(RedirectAttributes redirectAttributes, Model model, @RequestParam int id){
         try {
             keyItem keyItem = mazeComponentsService.getKeyItem(id);
+            model.addAttribute("type", "Update");
             model.addAttribute("cost", keyItem.getCost());
             model.addAttribute("id", keyItem.getId());
             model.addAttribute("name", keyItem.getName());
@@ -59,7 +61,8 @@ public class adminKeyController {
     }
 
     @GetMapping("/adminAddKey")
-    public String getAdminAddKey(){
+    public String getAdminAddKey(Model model){
+        model.addAttribute("type", "Add");
         return "keyForm";
     }
 

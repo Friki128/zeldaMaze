@@ -17,13 +17,14 @@ public class adminRoomController {
     mazeComponentsService mazeComponentsService;
     @GetMapping("/adminRoom")
     public String getAdminRoom(Model model){
-        model.addAttribute("rooms", mazeComponentsService.getAllRooms());
-        return "rooms";
+        model.addAttribute("type", "Room");
+        model.addAttribute("values", mazeComponentsService.getAllRooms());
+        return "adminList";
     }
-    @PostMapping("/adminDelRoom")
-    public String postAdminDelRoom(RedirectAttributes redirectAttributes, @RequestParam int roomId){
+    @GetMapping("/adminDelRoom")
+    public String getAdminDelRoom(RedirectAttributes redirectAttributes, @RequestParam int id){
         try {
-            mazeComponentsService.deleteRoom(roomId);
+            mazeComponentsService.deleteRoom(id);
             return "redirect:/adminRoom";
         } catch (RoomDoesNotExistException e) {
             redirectAttributes.addAttribute("error", "Room does not exist.");
@@ -35,6 +36,7 @@ public class adminRoomController {
     public String getAdminUpdateRoom(RedirectAttributes redirectAttributes, Model model, @RequestParam int id){
         try {
             room room = mazeComponentsService.getRoom(id);
+            model.addAttribute("type", "Update");
             model.addAttribute("name", room.getName());
             model.addAttribute("id", room.getId());
             model.addAttribute("coinPosition", room.getCoinPosition());
@@ -44,6 +46,7 @@ public class adminRoomController {
             model.addAttribute("up", room.getUpDirection());
             model.addAttribute("right", room.getRightDirection());
             model.addAttribute("left", room.getLeftDirection());
+            model.addAttribute("keys", mazeComponentsService.getAllKeyItems());
             return "roomForm";
         } catch (RoomDoesNotExistException e) {
             redirectAttributes.addAttribute("error", "Room does not exist.");
@@ -62,8 +65,10 @@ public class adminRoomController {
     }
 
     @GetMapping("/adminAddRoom")
-    public String getAdminAddRoom(){
-        return "RoomForm";
+    public String getAdminAddRoom(Model model){
+        model.addAttribute("type", "Add");
+        model.addAttribute("keys", mazeComponentsService.getAllKeyItems());
+        return "roomForm";
     }
 
     @PostMapping("/adminAddRoom")

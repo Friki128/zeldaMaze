@@ -32,6 +32,6 @@ public class coinController {
         } catch (NoCoinToCollectException e) {
             redirectAttributes.addAttribute("error", "No coin to collect.");
         }
-        return "redirect:/error";
+        return "redirect:/errorDisplay";
     }
 }

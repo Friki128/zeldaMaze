@@ -1,19 +1,17 @@
 package net.esliceu.maze.Model;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 public class map {
     int id;
     String name;
-    int startRoom;
+    Integer startRoom;
 
-    public map(int id, String name, int startRoom) {
+    @Autowired
+    public map(int id, String name, Integer startRoom) {
         this.id = id;
         this.name = name;
         this.startRoom = startRoom;
-    }
-
-    public map(int id, String name){
-        this.name = name;
-        this.id = id;
     }
     public int getId() {
         return id;
@@ -31,11 +29,11 @@ public class map {
         this.name = name;
     }
 
-    public int getStartRoom() {
+    public Integer getStartRoom() {
         return startRoom;
     }
 
-    public void setStartRoom(int startRoom) {
+    public void setStartRoom(Integer startRoom) {
         this.startRoom = startRoom;
     }
 }

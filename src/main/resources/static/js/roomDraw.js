@@ -1,7 +1,7 @@
 let keyImage = new Image()
-keyImage.src = "../static/img/key.webp"
+keyImage.src = "/img/key.webp"
 let coinImage = new Image()
-coinImage.src = "../static/img/coin.gif"
+coinImage.src = "/img/coin.gif"
 export function draw(canvas, left, right, up, down, coin, key){
     let context = canvas.getContext("2d")
     let size = canvas.width

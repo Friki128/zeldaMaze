@@ -15,7 +15,7 @@ public class mapDAOImpl implements mapDAO{
 
     @Override
     public void addMap(map map) {
-        jdbcTemplate.update("INSERT INTO map(name, start_room) VALUES(?,?);", map.getName(), map.getStartRoom());
+        jdbcTemplate.update("INSERT INTO map(name) VALUES(?);", map.getName());
     }
 
     @Override

@@ -21,14 +21,18 @@ public class adminRoomMapController {
     @Autowired
     mazeComponentsService mazeComponentsService;
     @GetMapping("/adminRoomMap")
-    public String getAdminKey(Model model, @RequestParam int mapId){
-        model.addAttribute("roomMaps", mazeComponentsService.getRoomMapByMap(mapId));
-        return "roomMaps";
+    public String getAdminRoomMap(Model model, @RequestParam int mapId){
+        model.addAttribute("type", "RoomMap");
+        model.addAttribute("map", mapId);
+        model.addAttribute("values", mazeComponentsService.getRoomMapByMap(mapId));
+        return "adminList";
     }
-    @PostMapping("/adminDelRoomMap")
-    public String postAdminDelRoomMap(RedirectAttributes redirectAttributes, @RequestParam int roomMapId){
+    @GetMapping("/adminDelRoomMap")
+    public String getAdminDelRoomMap(RedirectAttributes redirectAttributes, @RequestParam int id){
         try {
-            mazeComponentsService.removeRoomToMap(roomMapId);
+            roomMap roomMap = mazeComponentsService.getRoomMap(id);
+            redirectAttributes.addAttribute("mapId", roomMap.getMap());
+            mazeComponentsService.removeRoomToMap(id);
             return "redirect:/adminRoomMap";
         } catch (RoomConnectionDoesNotExist e) {
             redirectAttributes.addAttribute("error", "Room does not exist in map.");
@@ -40,24 +44,17 @@ public class adminRoomMapController {
     public String getAdminUpdateRoomMap(RedirectAttributes redirectAttributes, Model model, @RequestParam int id){
         try {
             roomMap roomMap = mazeComponentsService.getRoomMap(id);
-            room room = mazeComponentsService.getRoom(roomMap.getRoom());
+            model.addAttribute("type", "Update");
             model.addAttribute("id", roomMap.getId());
             model.addAttribute("name", roomMap.getName());
-            model.addAttribute("upConnection", roomMap.getUpDirection());
-            model.addAttribute("downConnection", roomMap.getDownDirection());
-            model.addAttribute("leftConnection", roomMap.getLeftDirection());
-            model.addAttribute("rightConnection", roomMap.getRightDirection());
-            model.addAttribute("upStatus", room.getUpDirection());
-            model.addAttribute("downStatus", room.getDownDirection());
-            model.addAttribute("leftStatus", room.getLeftDirection());
-            model.addAttribute("rightStatus", room.getRightDirection());
-            model.addAttribute("coin", room.getCoinPosition());
-            model.addAttribute("key", room.getKeyPosition());
+            model.addAttribute("up", roomMap.getUpDirection());
+            model.addAttribute("down", roomMap.getDownDirection());
+            model.addAttribute("left", roomMap.getLeftDirection());
+            model.addAttribute("right", roomMap.getRightDirection());
+            model.addAttribute("rooms", mazeComponentsService.getRoomMapByMap(roomMap.getMap()));
             return "roomMapForm";
         } catch (RoomConnectionDoesNotExist e) {
             redirectAttributes.addAttribute("error", "Room does not exist in map.");
-        } catch (RoomDoesNotExistException e) {
-            redirectAttributes.addAttribute("error", "Room does not exist.");
         }
         return "redirect:/error";
     }
@@ -65,6 +62,7 @@ public class adminRoomMapController {
     public String postAdminUpdateRoomMap(RedirectAttributes redirectAttributes, @RequestParam int id, @RequestParam String name, @RequestParam int up, @RequestParam int left, @RequestParam int down, @RequestParam int right){
         try {
             mazeComponentsService.updateRoomMap(id, up, down, left, right, name);
+            redirectAttributes.addAttribute("mapId", mazeComponentsService.getRoomMap(id).getMap());
             return "redirect:/adminRoomMap";
         } catch (RoomConnectionDoesNotExist e) {
             redirectAttributes.addAttribute("error", "Room does not exist in map.");
@@ -73,13 +71,17 @@ public class adminRoomMapController {
     }
 
     @GetMapping("/adminAddRoomMap")
-    public String getAdminAddRoomMap(){
+    public String getAdminAddRoomMap(Model model, @RequestParam int map){
+        model.addAttribute("map", map);
+        model.addAttribute("type", "Add");
+        model.addAttribute("rooms", mazeComponentsService.getAllRooms());
         return "roomMapForm";
     }
 
     @PostMapping("/adminAddRoomMap")
     public String postAdminAddRoomMap(RedirectAttributes redirectAttributes, @RequestParam int room, @RequestParam int map, @RequestParam String name){
         mazeComponentsService.addRoomToMap(room, map, name);
+        redirectAttributes.addAttribute("mapId", map);
         return "redirect:/adminRoomMap";
     }
 }

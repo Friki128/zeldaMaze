@@ -52,7 +52,7 @@ public class mazeComponentsService {
         room.setRightDirection(right);
         room.setName(name);
         room.setCoinPosition(coin);
-        room.setKeyId(keyId);
+        if(key != -1) room.setKeyId(keyId);
         roomDAO.updateRoom(room);
     }
 
@@ -131,7 +131,7 @@ public class mazeComponentsService {
         roomDAO.updateRoom(room);
     }
     public void createMap(String name){
-        map map = new map(0, name);
+        map map = new map(0, name, Integer.valueOf(1));
         mapDAO.addMap(map);
     }
     public void deleteMap(int id) throws MapDoesNotExistDirection {
@@ -150,10 +150,10 @@ public class mazeComponentsService {
     }
     public void updateRoomMap(int id, int up, int down, int left, int right, String name) throws RoomConnectionDoesNotExist {
         roomMap roomMap = getRoomMap(id);
-        roomMap.setUpDirection(up != -1 ?up :id);
-        roomMap.setDownDirection(down != -1 ?up :id);
-        roomMap.setLeftDirection(left != -1 ?up :id);
-        roomMap.setRightDirection(right != -1 ?up :id);
+        roomMap.setUpDirection(up != -1 ?up :null);
+        roomMap.setDownDirection(down != -1 ?down :null);
+        roomMap.setLeftDirection(left != -1 ?left :null);
+        roomMap.setRightDirection(right != -1 ?right :null);
         roomMap.setName(name);
         roomMapDAO.updateRoomMap(roomMap);
     }
@@ -166,7 +166,7 @@ public class mazeComponentsService {
         return mapDAO.findMaps();
     }
     public void addRoomToMap(int room, int map, String name){
-        roomMap roomMap = new roomMap(0, room, map, name);
+        roomMap roomMap = new roomMap(0, room, map, null, null, null, null,name);
         roomMapDAO.addRoomMap(roomMap);
     }
     public void removeRoomToMap(int id) throws RoomConnectionDoesNotExist {

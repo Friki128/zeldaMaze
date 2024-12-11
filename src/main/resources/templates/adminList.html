@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${type}"></title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <nav><a class="button" href="/admin">Admin Page</a></nav>
+    <div class="content">
+        <h1 th:text="${type}"></h1>
+        <div th:switch="${type}"> 
+            <a class="button" th:case="RoomMap" th:href="'/adminAddRoomMap?map='+${map}">Add room to map</a>
+            <a class="button" th:case="*" th:text="'New ' + ${type}" th:href="'/adminAdd' + ${type}"></a> 
+        </div>
+        <div class="items" th:each="item : ${values}">
+            <div class="item" th:switch="${type}">
+                <a class="itemName" th:href="'/adminUpdate' + ${type} + '?id=' + ${item.id}" th:text="${item.name}"></a>
+                <a class="button" th:case="Maze" th:href="'/adminRoomMap?mapId=' + ${item.id}">Change Rooms</a>
+                <a class="button" th:case="RoomMap" th:href="'/adminUpdateMazeStart?id=' + ${map} + '&start=' + ${item.id}">Make Start Room</a>
+                <a class="button" th:href="'/adminDel' + ${type} + '?id=' + ${item.id}">Delete</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maze Room</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="content">
+        <h1>Maze Room</h1>
+        <form th:action="'/admin' + ${type} + 'RoomMap'" th:switch="${type}" method="post">
+            <div th:case="Add">
+                <input type="number" name="map" id="map" th:value="${map}" class="hidden">
+                <label for="room">Room</label>
+                <select name="room" id="room">
+                    <option th:each="item : ${rooms}" th:value="${item.id}" th:text="${item.name}"></option>
+                </select>
+            </div>
+            <div th:case="Update">
+                <input type="number" name="id" id="id" th:value="${id}" class="hidden">
+                <label for="up">Up</label>
+                <select name="up" id="up">
+                    <option value="-1">None</option>
+                    <option th:each="item : ${rooms}" th:value="${item.id}" th:text="${item.name}" th:selected="${item.id == up}"></option>
+                </select>
+                <label for="left">Left</label>
+                <select name="left" id="left">
+                    <option value="-1">None</option>
+                    <option th:each="item : ${rooms}" th:value="${item.id}" th:text="${item.name}" th:selected="${item.id == left}"></option>
+                </select>
+                <label for="down">Down</label>
+                <select name="down" id="down">
+                    <option value="-1">None</option>
+                    <option th:each="item : ${rooms}" th:value="${item.id}" th:text="${item.name}" th:selected="${item.id == down}"></option>
+                </select>
+                <label for="right">Right</label>
+                <select name="right" id="right">
+                    <option value="-1">None</option>
+                    <option th:each="item : ${rooms}" th:value="${item.id}" th:text="${item.name}" th:selected="${item.id == right}"></option>
+                </select>
+            </div>
+            <label for="name">Name</label>
+            <input type="text" name="name" id="name" th:value="${name}">
+            
+            <input class="button" type="submit" value="Submit">
+        </form>
+    </div>
+</body>
+</html>

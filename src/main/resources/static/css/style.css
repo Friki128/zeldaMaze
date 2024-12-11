@@ -1,0 +1,89 @@
+*{
+    --color1: #FDF7F4;
+    --color2: #8EB486;
+    --color3: #997C70;
+    --color4: #685752;
+}
+
+html{
+    width: 100%;
+    background-color: var(--color1);
+}
+
+label{
+    color: var(--color4);
+    text-align: center;
+}
+
+.content{
+    display: flex;
+    width: 50%;
+    height: 50%;
+    margin: auto auto;
+    flex-direction: column;
+    align-items: center;
+}
+
+.content *{
+    margin-top: 10px;
+}
+
+form{
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    align-items: center;
+}
+
+form *{
+    margin-top: 10px;
+}
+
+input{
+    display: block;
+}
+
+p{
+    text-align: center;
+    color: red;
+}
+
+.button{
+    text-decoration: none;
+    color: var(--color4);
+    background-color: var(--color2);
+    padding: 2px;
+    border: 1px solid var(--color4);
+    border-radius: 5px;
+    text-transform: capitalize;
+}
+
+.button:hover{
+    color: var(--color2);
+    background-color: var(--color4);
+}
+
+h1{
+    color: var(--color4);
+    text-transform: capitalize;
+}
+
+.hidden{
+    display: none;
+}
+
+.itemName{
+    text-decoration: none;
+    color:var(--color4);
+}
+
+.itemName:hover{
+    text-decoration: underline;
+    color:var(--color2)
+}
+
+.inline{
+    display: flex;
+    flex-direction: row;
+
+}

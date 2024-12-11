@@ -34,6 +34,6 @@ public class resetController {
         } catch (GameAlreadyInMotionException e) {
             redirectAttributes.addAttribute("error", "Game already in motion.");
         }
-        return "redirect:/error";
+        return "redirect:/errorDisplay";
     }
 }

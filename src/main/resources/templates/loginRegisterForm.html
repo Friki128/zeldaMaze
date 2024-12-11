@@ -4,15 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title th:text="${title}"></title>
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
+    <div class="content">
+        <h1 th:text="${title}"></h1>
     <form th:action="${title}" method="post">
         <label for="name">Name</label>
         <input type="text" name="name" id="name">
         <label for="password">Password</label>
         <input type="password" name="password" id="password">
-        <input type="submit" th:value="${title}">
+        <input class="button" type="submit" th:value="${title}">
+        <div th:switch="${title}"> 
+            <a class="button" th:case="register" href="/login">Already have an account?</a>
+            <a class="button" th:case="login" href="/register">Make an account</a> 
+        </div>
     </form>
     <p th:text="${error}"></p>
+    </div>
 </body>
 </html>
