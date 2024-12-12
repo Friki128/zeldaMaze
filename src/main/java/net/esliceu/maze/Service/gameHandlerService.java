@@ -56,10 +56,10 @@ public class gameHandlerService {
     }
     public String endGame(user user) throws GameDoesNotExistException {
         game game = getCurrentGame(user.getId());
-        List<gameRoom> gameRooms = getGameRoomsByGame(game.getId());
-        for(gameRoom gameRoom : gameRooms){
-            gameRoomDAO.deleteGameRoom(gameRoom);
-        }
+        //List<gameRoom> gameRooms = getGameRoomsByGame(game.getId());
+        //for(gameRoom gameRoom : gameRooms){
+          //  gameRoomDAO.deleteGameRoom(gameRoom);
+        //}
         game.setCurrent(false);
         game.setTime(timeUtil.calcTimeDistance(game.getTime(), timeUtil.getTime()));
         gameDAO.updateGame(game);

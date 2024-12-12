@@ -33,7 +33,7 @@ public class resultController {
     public String getScores(Model model, @RequestParam int id) throws IOException{
         List<score> scores = gameHandlerService.getFinishedGamesByMap(id);
         try {
-            model.addAttribute(",map", mazeComponentsService.getMap(id).getName());
+            model.addAttribute("map", mazeComponentsService.getMap(id).getName());
         } catch (MapDoesNotExistDirection e) {
            return "redirect:/error";
         }
