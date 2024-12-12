@@ -63,7 +63,13 @@ p{
     background-color: var(--color4);
 }
 
-h1{
+.text{color: var(--color2);}
+
+.big{
+    font-size: large;
+}
+
+h1, h2, h3{
     color: var(--color4);
     text-transform: capitalize;
 }
@@ -73,6 +79,11 @@ h1{
 }
 
 .itemName{
+    text-decoration: none;
+    color:var(--color4);
+}
+
+.itemNameBase{
     text-decoration: none;
     color:var(--color4);
 }

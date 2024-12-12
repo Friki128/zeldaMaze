@@ -4,19 +4,19 @@ public class game {
     int id;
     int user;
     int map;
-    int currentRoom;
+    Integer currentRoom;
     int coinAmount;
     String time;
-    boolean playing;
+    boolean current;
 
-    public game(int id, int user, int map, int currentRoom, int coinAmount, String time, boolean playing) {
+    public game(int id, int user, int map, Integer currentRoom, int coinAmount, String time, boolean current) {
         this.id = id;
         this.user = user;
         this.map = map;
         this.currentRoom = currentRoom;
         this.coinAmount = coinAmount;
         this.time = time;
-        this.playing = playing;
+        this.current = current;
     }
 
     public int getId() {
@@ -43,11 +43,11 @@ public class game {
         this.map = map;
     }
 
-    public int getCurrentRoom() {
+    public Integer getCurrentRoom() {
         return currentRoom;
     }
 
-    public void setCurrentRoom(int currentRoom) {
+    public void setCurrentRoom(Integer currentRoom) {
         this.currentRoom = currentRoom;
     }
 
@@ -67,11 +67,11 @@ public class game {
         this.time = time;
     }
 
-    public boolean isPlaying() {
-        return playing;
+    public boolean isCurrent() {
+        return current;
     }
 
-    public void setPlaying(boolean playing) {
-        this.playing = playing;
+    public void setCurrent(boolean current) {
+        this.current = current;
     }
 }

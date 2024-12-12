@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${status.roomName}"></title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="content">
+        <p th:text="${error}?:''"></p>
+        <h1 th:text="${status.roomName}"></h1>
+        <div class="inline">
+            <div class="inline">
+                <h2>Coins: </h2>
+                <p class="text big" th:text="${status.coinAmount}"></p>
+            </div>
+            <div class="inline">
+                <h3>Keys: </h3>
+                <p class="text" th:each="item : ${status.keyNames}" th:text="${item.name} + ' '"></p>
+            </div>
+            <a class="button" href="/reset">Reset</a>
+        </div>
+        <canvas width="800" height="800" id="canvas"></canvas>
+    </div>
+    <input class="hidden" type="text" name="right" id="right" th:value="${status.rightDirection}">
+    <input class="hidden" type="text" name="left" id="left" th:value="${status.leftDirection}">
+    <input class="hidden" type="text" name="up" id="up" th:value="${status.upDirection}">
+    <input class="hidden" type="text" name="down" id="down" th:value="${status.downDirection}">
+    <input class="hidden" type="number" name="keyPosition" id="keyPosition" th:value="${status.keyStatus}?${status.keyPosition}:-1">
+    <input class="hidden" type="number" name="coinPosition" id="coinPosition" th:value="${status.coinStatus}?${status.coinPosition}:-1">
+    <script class="hidden" type="module" src="/js/roomPage.js"></script>
+</body>
+</html>

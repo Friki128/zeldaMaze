@@ -7,6 +7,7 @@ import net.esliceu.maze.Exceptions.RoomDoesNotExistException;
 import net.esliceu.maze.Exceptions.RoomNotInMapException;
 import net.esliceu.maze.Model.user;
 import net.esliceu.maze.Service.gameHandlerService;
+import net.esliceu.maze.Utils.playerGameInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,10 +24,15 @@ public class mazeController {
     @Autowired
     gameHandlerService gameHandlerService;
     @GetMapping("/maze")
-    public String getMaze(Model model, RedirectAttributes redirectAttributes, @RequestParam String error) throws IOException {
+    public String getMaze(Model model, RedirectAttributes redirectAttributes, @RequestParam(required = false) String error) throws IOException {
         user user = (user) httpSession.getAttribute("user");
         try {
-            model.addAttribute("status", gameHandlerService.getGameInfo(user));
+            playerGameInfo gameInfo = gameHandlerService.getGameInfo(user);
+            if(gameInfo.getRoomName().equals("Exit")){
+                redirectAttributes.addAttribute("time", gameHandlerService.endGame(user));
+                return "redirect:/end";
+            }
+            model.addAttribute("status", gameInfo);
             model.addAttribute("error", error);
             return "maze";
         } catch (GameDoesNotExistException e) {

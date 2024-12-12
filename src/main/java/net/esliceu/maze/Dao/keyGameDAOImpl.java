@@ -15,7 +15,7 @@ public class keyGameDAOImpl implements keyGameDAO{
     JdbcTemplate jdbcTemplate;
     @Override
     public void addKeyGame(keyGame keyGame) {
-        jdbcTemplate.update("INSERT INTO key_game(game, name) VALUES(?.?);", keyGame.getGame(), keyGame.getName());
+        jdbcTemplate.update("INSERT INTO key_game(game, name) VALUES(?,?);", keyGame.getGame(), keyGame.getName());
     }
 
     @Override

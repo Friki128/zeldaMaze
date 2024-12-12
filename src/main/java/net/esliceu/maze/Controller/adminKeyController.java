@@ -32,7 +32,7 @@ public class adminKeyController {
         } catch (KeyDoesNotExistException e) {
             redirectAttributes.addAttribute("error", "Key does not exist.");
         }
-        return "redirect:/error";
+        return "redirect:/errorDisplay";
     }
 
     @GetMapping("/adminUpdateKey")
@@ -47,7 +47,7 @@ public class adminKeyController {
         } catch (KeyDoesNotExistException e) {
             redirectAttributes.addAttribute("error", "Key does not exist.");
         }
-        return "redirect:/error";
+        return "redirect:/errorDisplay";
     }
     @PostMapping("/adminUpdateKey")
     public String postAdminUpdateKey(RedirectAttributes redirectAttributes, @RequestParam int id, @RequestParam String name, @RequestParam int cost){
@@ -57,7 +57,7 @@ public class adminKeyController {
         } catch (KeyDoesNotExistException e) {
             redirectAttributes.addAttribute("error", "Key does not exist.");
         }
-        return "redirect:/error";
+        return "redirect:/errorDisplay";
     }
 
     @GetMapping("/adminAddKey")

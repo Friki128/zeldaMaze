@@ -14,7 +14,7 @@ public class gameRoomDAOImpl implements gameRoomDAO{
     JdbcTemplate jdbcTemplate;
     @Override
     public void addGameRoom(gameRoom gameRoom) {
-        jdbcTemplate.update("INSERT INTO game_room(game, room_map, key_status, coin_status, up_direction, down_direction, left_direction, right_direction) VALUES(?,?,?,?,?,?,?,?)", gameRoom.getGame(), gameRoom.getRoomMap(), gameRoom.isKeyStatus(), gameRoom.getUpDirection(), gameRoom.getDownDirection(), gameRoom.getLeftDirection(), gameRoom.getRightDirection(), gameRoom.isCoinStatus());
+        jdbcTemplate.update("INSERT INTO game_room(game, room_map, key_status, coin_status, up_direction, down_direction, left_direction, right_direction) VALUES(?,?,?,?,?,?,?,?)", gameRoom.getGame(), gameRoom.getRoomMap(), gameRoom.isKeyStatus(), gameRoom.isCoinStatus(), gameRoom.getUpDirection(), gameRoom.getDownDirection(), gameRoom.getLeftDirection(), gameRoom.getRightDirection());
     }
 
     @Override

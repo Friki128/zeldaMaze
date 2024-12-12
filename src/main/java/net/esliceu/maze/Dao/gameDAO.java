@@ -9,5 +9,6 @@ public interface gameDAO {
     void updateGame(game game);
     void deleteGame(game game);
     List<game> findFinishedGames();
+    List<game> findFinishedGamesByMap(int id);
     game findCurrentGame(int userId);
 }

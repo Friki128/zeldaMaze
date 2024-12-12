@@ -22,11 +22,7 @@ public class moveController {
     public String getMove(RedirectAttributes redirectAttributes, @RequestParam String dir) throws IOException{
         user user = (user) httpSession.getAttribute("user");
         try {
-            String time = gameHandlerService.move(user, dir);
-            if(!time.isEmpty()){
-                redirectAttributes.addAttribute("time", time);
-                return "redirect:/end";
-            }
+            gameHandlerService.move(user, dir);
             return "redirect:/maze";
         } catch (GameDoesNotExistException e) {
             redirectAttributes.addAttribute("error", "Game does not exist.");

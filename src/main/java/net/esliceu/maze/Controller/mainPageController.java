@@ -27,7 +27,7 @@ public class mainPageController {
             gameHandlerService.getCurrentGame(user.getId());
             return "redirect:/maze";
         } catch (GameDoesNotExistException e) {
-            model.addAttribute("mazes", mazeComponentsService.getAllMaps());
+            model.addAttribute("values", mazeComponentsService.getAllMaps());
             return "mazes";
         }
     }

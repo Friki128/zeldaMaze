@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${map} + ' Scores'"></title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="content">
+        <h1 th:text="${map}"></h1>
+        <div class="inline" th:each="item : ${scores}">
+            <p class="text" th:text="${item.user} + ': ' + ${item.time}" ></p>
+        </div>
+    </div>
+</body>
+</html>

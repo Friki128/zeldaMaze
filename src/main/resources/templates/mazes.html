@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mazes</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="content">
+        <h1>Mazes</h1>
+        <div class="items" th:each="item : ${values}">
+            <div class="item">
+                <p class="itemNameBase" th:text="${item.name}"></p>
+                <a class="button" th:href="'/scores?id=' + ${item.id}">Scores</a>
+                <a class="button" th:href="'/start?mapId=' + ${item.id}">Play</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
